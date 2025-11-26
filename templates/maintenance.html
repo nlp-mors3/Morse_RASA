@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Under Construction | We'll Be Back Soon!</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center font-['Poppins']">
+    <div class="max-w-4xl mx-4 p-8 bg-white rounded-xl shadow-2xl text-center">
+        <div class="flex justify-center mb-8">
+            <div class="w-32 h-32 bg-blue-400 rounded-full flex items-center justify-center animate-bounce">
+                <i data-feather="tool" class="w-16 h-16 text-white"></i>
+            </div>
+        </div>
+        
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Under Construction</h1>
+        <p class="text-xl text-gray-600 mb-8">Our website is getting a makeover! We're working hard to bring you an amazing experience.</p>
+        
+        <div class="relative h-4 bg-gray-200 rounded-full overflow-hidden mb-8">
+            <div class="absolute top-0 left-0 h-full bg-blue-400 rounded-full progress-bar" style="width: 0%"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <i data-feather="clock" class="w-8 h-8 text-blue-500 mb-3"></i>
+                <h3 class="font-semibold text-lg mb-2">Estimated Time</h3>
+                <p class="text-gray-600">24-48 hours</p>
+            </div>
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <i data-feather="mail" class="w-8 h-8 text-blue-500 mb-3"></i>
+                <h3 class="font-semibold text-lg mb-2">Contact Us</h3>
+                <p class="text-gray-600">nlp-mors3@support.com</p>
+            </div>
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <i data-feather="refresh-cw" class="w-8 h-8 text-blue-500 mb-3"></i>
+                <h3 class="font-semibold text-lg mb-2">Status</h3>
+                <p class="text-gray-600">In Progress</p>
+            </div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="#" class="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition duration-300 flex items-center justify-center gap-2">
+                <i data-feather="home"></i> Back to Home
+            </a>
+            <a href="#" class="px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white font-medium rounded-lg transition duration-300 flex items-center justify-center gap-2">
+                <i data-feather="send"></i> Contact Support
+            </a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>
