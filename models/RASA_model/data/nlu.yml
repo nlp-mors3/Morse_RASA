@@ -89,3 +89,20 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+
+# see if we need the intent above for basic bot operation,
+# Intents below are dedicated for translation operation:
+# <><><><><><><><><><><><>
+- lookup: ibaloi_word
+    examples: |
+      - ibaloi_words.txt  # Reference the file generated from lexicon thru Python code []
+
+- lookup: english_word
+    examples: |
+      - english_words.txt # Reference the file generated from lexicon thru Python code []
+- intent: ask_ibaloi
+  examples: |
+    - what is [house](English) in Ibaloi?
+
+
+# <><><><><><><><><><><><>
