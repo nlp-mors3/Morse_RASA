@@ -23,12 +23,12 @@ def rasa_translator():
 # =============================
 
 @app.route("/")
-def home():
-    return render_template("index.html")
+def dashboard():
+    return render_template("dashboard.html")
 
 @app.route("/translator")
 def translator():
-    return render_template("index.html")
+    return render_template("translation.html")
 
 # =============================
 # ERROR HANDLER ROUTES
