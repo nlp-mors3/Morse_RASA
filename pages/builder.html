@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="../builder/style.css">
+  <script src="../control/shared/script.js"></script>
+</head>
+
+<body>
+  <div id="navbar"></div>
+  <div id="container">
+
+    <h2>Pick your main word</h2>
+    <div class="word-list" id="word-list">
+    </div>
+
+    <div id="sentences"></div>
+    <button id="add-btn" onclick="addSentencePair()"> + Add Another Sentence</button>
+    <br><br>
+    <button onclick="submitSentences()">Submit Sentences</button>
+    <div id="status"></div>
+  </div>
+
+  <script src="../control/script.js"></script>
+</body>
+
+</html>

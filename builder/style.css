@@ -1,0 +1,560 @@
+*{
+  scrollbar-color: rgba(0,0,0,0.4) transparent;
+}
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #f5f7fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* padding: 2rem; */
+  margin: 0;
+}
+
+h1 {
+  color: #333;
+}
+
+#container {
+  max-width: 800px;
+  width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin: 2rem;
+}
+
+.word-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.word-card {
+  flex: 1 1 calc(33% - 1rem);
+  background: #f0f4ff;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.word-card:hover {
+  background: #d9e2ff;
+}
+
+.word-card.selected {
+  background: #2a4d9c;
+  color: white;
+}
+
+.word {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.meta {
+  font-size: 0.8rem;
+  color: inherit;
+}
+
+.sentence-pair {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #fafafa;
+  border-radius: 10px;
+}
+
+.sentence-pair input {
+  margin: 0.3rem 0;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.picker {
+  margin: 1rem 0;
+}
+
+button {
+  background: #2a4d9c;
+  color: white;
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button:hover {
+  background: #1d3570;
+}
+
+#status {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #2a4d9c;
+}
+
+#add-btn {
+  margin-top: 1rem;
+  background: #4da8da;
+}
+
+/* Skeleton*/
+@keyframes skeleton-loading {
+  0% {
+    background-color: #e3e3e3;
+  }
+
+  50% {
+    background-color: #f0f0f0;
+  }
+
+  100% {
+    background-color: #e3e3e3;
+  }
+}
+
+.skeleton-card .skeleton-block {
+  height: 14px;
+  width: 80%;
+  border-radius: 4px;
+  animation: skeleton-loading 1.2s infinite ease-in-out;
+  margin-bottom: 8px;
+}
+
+.skeleton-card .word {
+  height: 20px;
+  width: 60%;
+}
+
+.skeleton-card .meta {
+  height: 14px;
+  width: 40%;
+}
+
+.word-card {
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  width: 100vw;
+  display: flex;
+  box-sizing: border-box;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background-color: #2a4d9c;
+  color: white;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  padding: 8px 12px;
+  transition: background-color 0.3s;
+}
+
+.nav-links #active {
+  text-decoration: none;
+  color: black;
+  padding: 8px 12px;
+  transition: background-color 0.3s;
+}
+
+.nav-links a:hover {
+  background-color: #1d3570;
+  border-radius: 4px;
+}
+
+.nav-btn {
+  padding: 8px 16px;
+  background-color: #ff9800;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.nav-btn:hover {
+  background-color: #e68900;
+}
+
+
+
+/*
+Used in: 
+index.html
+*/
+.stats-container {
+  display: flex;
+  gap: 20px;
+  margin: 25px 0;
+  padding: 20px;
+  background: #fafafa;
+  border: 1px solid #e3e3e3;
+  border-radius: 10px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.stats-card {
+  flex: 1;
+  min-width: 180px;
+  background: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: 1px solid #e2e2e2;
+  text-align: center;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.stats-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.stats-label {
+  font-size: 0.9rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lexicon-header {
+  display: flex;
+  justify-content: space-between;
+  /* pushes them to opposite ends */
+  align-items: center;
+  /* aligns them on the same Y-axis */
+  width: 100%;
+}
+
+#download-btn {
+  padding: 8px 16px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#download-btn:hover {
+  background: #0063cc;
+}
+
+/* Container */
+#table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Sticky header */
+#lexicon-table thead th {
+  position: sticky;
+  top: 0;
+  background: #f9f9f9;
+  z-index: 2;
+  padding: 8px;
+}
+
+/* Column width default */
+#lexicon-table th,
+#lexicon-table td {
+  width: 200px;
+  /* you can adjust */
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 6px 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Sorting popup */
+.sort-popup {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  display: none;
+  z-index: 10;
+}
+
+.sort-btn {
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  background: #eee;
+  border: none;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.sort-btn:hover {
+  background: #ccc;
+}
+
+
+/* For paragraph stuff */
+.paragraph-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.paragraph-content {
+  max-height: 120px;
+  /* COLLAPSED height */
+  overflow: hidden;
+  position: relative;
+  transition: max-height 0.4s ease;
+}
+
+.paragraph-content::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 40px;
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), white);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.paragraph-content.expanded {
+  max-height: 1000px;
+}
+
+.paragraph-content.expanded::after {
+  opacity: 0;
+}
+
+.see-more-btn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: #007bff;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.see-more-btn:hover {
+  background: #005fcc;
+}
+
+
+#about-sections {
+  display: flex;
+  gap: 40px;
+  margin: 30px 0;
+  flex-wrap: wrap;
+  max-height: 10%;
+  min-height: 0;
+  overflow: auto;
+}
+
+.section-box {
+  flex: 1;
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+/* Divider line */
+.divider {
+  margin: 40px 0;
+  border: 0;
+  border-top: 1px solid #ccc;
+}
+
+/* Contact section */
+#contact-section {
+  margin-top: 20px;
+  position: fixed;
+  bottom: 0;
+}
+
+/* Background Slideshow */
+#bg-slideshow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  z-index: -2;
+  transition: opacity 1.5s ease-in-out;
+}
+
+#bg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 60, 150, 0.45);
+  /* blue tint */
+  z-index: -1;
+}
+
+/* Main Wrapper */
+.main-about-wrapper {
+  display: flex;
+  background: #0a2a5e;
+  border-radius: 20px;
+  margin: auto;
+  width: 90%;
+  max-height: 70vh;
+  max-width: 70vw;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.main-about-wrapper>#container {
+  margin: 0 !important;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 20px 0px 5px -10px rgba(0, 0, 0, 0.2);
+}
+
+/* .main-about-wrapper>#container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1%;
+  height: 100%;
+  pointer-events: none;
+
+  background: linear-gradient(to left,
+      rgba(0, 0, 0, 0.25),
+      rgba(0, 0, 0, 0)
+    );
+} 
+*/
+
+.main-about-wrapper>#container::-webkit-scrollbar-track-piece{
+  background: #005fcc;
+}
+
+/* Left: About Us */
+#about-left {
+  flex: 2;
+}
+
+/* Right: Logo Container */
+#logo-container {
+  flex: 1;
+  background: 0a2a5e;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+#logo-image {
+  width: 90%;
+  border-radius: 12px;
+}
+
+/* Circle Contact Buttons */
+#contact-icons {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.circle-btn {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: white;
+  color: #0a2a5e;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.circle-btn:hover {
+  background: #d0e2ff;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.modal-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.modal-btns button {
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+}
+
