@@ -25,7 +25,7 @@ then the main thing
    ```
 
 3. Configure the Google Apps Script web app and update `GAS_URL` in `proxy.js`.
-4. Start the proxy:
+4. Start the proxy (which builds the builder):
 
    ```bash
    node proxy.js
