@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from nlp_lib.doc_reader import get_content_sections as gcs
 
 app = Flask(
     __name__, 
@@ -22,6 +23,21 @@ def rasa_translator():
 def research_paper():
     return render_template("research.html")
 
+@app.route("/read-doc-content", methods=["POST"])
+def get_sections():
+    data = request.get_json()
+    filepath = data.get('filepath')
+
+    if not filepath:
+        return jsonify({"error": "Missing filepath or document name"}), 400
+
+    try:
+        sections_data = gcs(filepath, root_dir=app.root_path)
+        # sections_data = gcs()
+        return jsonify(sections_data)
+        
+    except Exception as e:
+        return jsonify({"error": f"An error occurred during processing: {str(e)}"}), 500
 
 # =============================
 # ADMIN PAGE ROUTES
@@ -77,7 +93,6 @@ def lexiconBrowse():
 def builder():
     return render_template("builder.html")
 
-import requests
 from flask import request, jsonify
 
 GAS_URL =  "https://script.google.com/macros/s/AKfycbwDsmJEmfVwHGwNWSGEzOB-CMC2Bv1tCXntSJEhe8m1wyFWM7j5IhpwUfksKst0_6Vftw/exec"
