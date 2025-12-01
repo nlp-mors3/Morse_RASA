@@ -28,7 +28,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary selection:text-white">
 
-    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300 max" id="navbar">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="/" class="text-2xl font-bold text-primary flex items-center gap-2">
                 <i data-feather="book-open" class="w-6 h-6"></i>
@@ -51,7 +51,7 @@
         <div class="hidden md:hidden bg-white border-t p-4 flex flex-col gap-4 shadow-lg" id="mobile-menu">
             <a href="/lexicon-browse">Lexicon</a>
             <a href="#research">Research Paper</a>
-            <a href="/sentence-builder">Sentence Builder</a>
+            <a href="/builder">Sentence Builder</a>
             <a href="https://ibaloi-webapp.vercel.app/">RASA Translator</a>
             <a href="#about">About Us</a>
         </div>
@@ -81,7 +81,7 @@
             </div>
         </div>
     </header>
-
+    <section id="table"></section>
     <main class="container mx-auto px-6 py-16 -mt-10 relative z-20">
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
@@ -98,7 +98,7 @@
                 <p class="text-sm text-slate-500 uppercase tracking-wide">Classifier Architecture</p>
             </div>
         </div>
-        <section id="table"></section>
+        
         <section id="research" class="mb-24">
             <div class="flex flex-col md:flex-row gap-12 items-center">
                 <div class="w-full md:w-1/2">
@@ -149,7 +149,7 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
-                <a href="/lexicon" class="card group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary/20 transition-all">
+                <a href="/lexicon-browse" class="card group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary/20 transition-all">
                     <div class="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
                         <i data-feather="list"></i>
                     </div>
@@ -160,7 +160,7 @@
                     <span class="text-sm font-semibold text-primary group-hover:translate-x-1 transition-transform inline-block">Browse Dictionary &rarr;</span>
                 </a>
 
-                <a href="/sentence-builder" class="card group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary/20 transition-all">
+                <a href="/builder" class="card group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary/20 transition-all">
                     <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                         <i data-feather="layers"></i>
                     </div>
@@ -211,15 +211,27 @@
 
         // Navbar Scroll Effect
         const nav = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 20) {
-                nav.classList.add('shadow-md', 'bg-white/90', 'backdrop-blur-md');
-                nav.classList.remove('bg-transparent');
-            } else {
-                nav.classList.remove('shadow-md', 'bg-white/90', 'backdrop-blur-md');
-                nav.classList.add('bg-transparent');
-            }
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+        nav.classList.add('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+        nav.classList.remove('bg-transparent');
+
+        // Make children dark
+        navLinks.forEach(el => {
+            el.classList.remove('text-white');
+            el.classList.add('text-slate-800');
         });
+    } else {
+        nav.classList.remove('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+        nav.classList.add('bg-transparent');
+
+        // Make children white
+        navLinks.forEach(el => {
+            el.classList.remove('text-slate-800');
+            el.classList.add('text-white');
+        });
+    }
+});
 
         // Mobile Menu Toggle
         const btn = document.getElementById('mobile-menu-btn');
@@ -245,7 +257,12 @@
             document.getElementById('table').style.display = '';
             document.getElementById('general-search').value =  document.getElementById('general-search2').value
             location.href = '#table'
-        });            
+        });
+        document.getElementById('general-search2').addEventListener('keypress', e =>{
+            if (e.key === 'Enter') 
+                document.getElementById('search-btn').click();
+        });
+
     </script>
 </body>
 </html>

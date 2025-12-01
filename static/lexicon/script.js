@@ -6,12 +6,52 @@ const rowsPerPage = 50;
 let columnNames = [];
 
 async function loadCSV(path) {
-    const response = await fetch(path);
+    showSkeleton();
+    const response = await fetch(path, { cache: "no-store" });
     if (!response.ok) {
         throw new Error("Could not load CSV: " + response.status);
     }
     return await response.text();
 }
+
+setInterval(refreshCSV, 10 * 60 * 1000);
+
+async function refreshCSV() {
+    showSkeleton();
+    try {
+        const csvText = await loadCSV("https://docs.google.com/spreadsheets/d/1iaKr-e3DG8S5fNR2ht1053DzqNSyV6dgbkj43_SMhdM/export?format=csv&gid=0");
+        const { headers, rows } = parseCSV(csvText);
+        console.log(csvText);
+        fullData = rows;
+
+        // Apply current search filter
+        const searchInput = document.getElementById('general-search');
+        const query = searchInput.value.toLowerCase();
+        fullDataCurrentView = query
+            ? fullData.filter(row => Object.values(row).some(val => val && val.toString().toLowerCase().includes(query)))
+            : fullData;
+
+        if (query && fullDataCurrentView.length === 0) {
+            document.getElementById("lexicon-tbody").innerHTML = `
+        <tr>
+            <td class="px-4 py-2 text-center text-gray-500" colspan="8">
+                No results found
+            </td>
+        </tr>
+        `;
+            return; // skip renderPage
+        }
+
+        // Re-render table
+        showSkeleton();
+        renderTableHeader(headers);
+        renderPage();
+    } catch (err) {
+        console.error("Failed to refresh CSV:", err);
+    }
+}
+
+
 
 feather.replace();
 
@@ -43,7 +83,6 @@ function showSkeleton() {
         <th class="px-4 py-2 bg-gray-100 animate-pulse">Loading...</th>
     </tr>`;
 
-    // Skeleton rows
     tbody.innerHTML = "";
     for (let i = 0; i < 5; i++) {
         const tr = document.createElement("tr");
@@ -232,7 +271,7 @@ function generateSummaryRow(headers) {
 
     thead.appendChild(chartRow);
 
-    
+
     // ------------------------
     // Summary Text Row
     // ------------------------
@@ -297,33 +336,56 @@ function renderTableRows(data) {
 
 // --- Render Page ---
 function renderPage() {
-    let data = fullDataCurrentView.length ? [...fullDataCurrentView] : [...fullData];
+    // Start from the full data
+    let filteredData = fullData;
 
-    // --- 1. APPLY SORTING IF ACTIVE ---
-    if (currentSort && currentSort.column !== null) {
-        const col = currentSort.column;
-        const dir = currentSort.direction === "asc" ? 1 : -1;
-
-        data.sort((a, b) => {
-            const v1 = a[col] ?? "";
-            const v2 = b[col] ?? "";
-
-            if (!isNaN(v1) && !isNaN(v2)) {
-                return (Number(v1) - Number(v2)) * dir;
-            }
-            return v1.toString().localeCompare(v2.toString()) * dir;
-        });
+    // --- General Search ---
+    const generalQuery = document.getElementById('general-search').value.toLowerCase();
+    if (generalQuery) {
+        filteredData = filteredData.filter(row =>
+            Object.values(row).some(val => val && val.toString().toLowerCase().includes(generalQuery))
+        );
     }
 
-    // --- 2. PAGINATION ---
-    const start = (currentPage - 1) * rowsPerPage;
-    const pageRows = data.slice(start, start + rowsPerPage);
+    // --- Per-Column Search ---
+    const columnInputs = document.querySelectorAll('.column-search'); // add class to your per-col inputs
+    columnInputs.forEach(input => {
+        const colName = input.dataset.col; // set data-col attribute with the column key
+        const query = input.value.toLowerCase();
+        if (query) {
+            filteredData = filteredData.filter(row =>
+                row[colName] && row[colName].toString().toLowerCase().includes(query)
+            );
+        }
+    });
 
+    // Update current view
+    fullDataCurrentView = filteredData;
+    data = filteredData;
+    // Reset to first page
+    currentPage = 1;
+
+
+    // Render current page
+    const start = (currentPage - 1) * rowsPerPage;
+    const pageRows = fullDataCurrentView.slice(start, start + rowsPerPage);
     renderTableRows(pageRows);
 
-    // --- 3. PAGE INFO ---
+    // Update page info
     document.getElementById("page-info").textContent =
-        `Page ${currentPage} of ${Math.ceil(data.length / rowsPerPage)}`;
+        `Page ${currentPage} of ${Math.max(1, Math.ceil(fullDataCurrentView.length / rowsPerPage))}`;
+
+    // Handle "no results"
+    if (!fullDataCurrentView.length) {
+        document.getElementById('table-body').innerHTML = `
+            <tr><td colspan="${Object.keys(fullData[0]).length}" class="text-center py-4 text-slate-400">No results found</td></tr>
+        `;
+    }
+
+    // --- 3. PAGE INFO ---
+    const totalPages = Math.ceil(data.length / rowsPerPage);
+    document.getElementById("page-info").textContent =
+        `Page ${currentPage} of ${totalPages || 1}`;
 }
 
 
@@ -336,24 +398,17 @@ document.getElementById("next-page").onclick = () => {
 
 // --- General Search ---
 document.getElementById('general-search').addEventListener('input', e => {
+    refreshCSV();
     const q = e.target.value.toLowerCase();
-    fullDataCurrentView = fullData.filter(row =>
-        Object.values(row).some(val => val && val.toString().toLowerCase().includes(q))
-    );
+    if (q === "") {
+        // No search query → show full table
+        fullDataCurrentView = [...fullData];
+    } else {
+        fullDataCurrentView = fullData.filter(row =>
+            Object.values(row).some(val => val && val.toString().toLowerCase().includes(q))
+        );
+    }
     currentPage = 1;
-    renderPage();
-});
-// --- INITIAL LOAD ---
-document.addEventListener('DOMContentLoaded', () => {
-    let csvText = `
-Word,Meaning,POS,Sentiment
-tibay,strength,noun,positive
-lungkot,sadness,noun,negative
-alaga,care,verb,positive
-`;
-    const { headers, rows } = parseCSV(csvText);
-    fullData = rows;
-    renderTableHeader(headers);
     renderPage();
 });
 
@@ -379,7 +434,6 @@ loadCSV("https://docs.google.com/spreadsheets/d/1iaKr-e3DG8S5fNR2ht1053DzqNSyV6d
 const colPopup = document.createElement("div");
 colPopup.className = "absolute hidden z-50 bg-white border border-gray-300 rounded-md shadow-lg text-sm p-2";
 colPopup.innerHTML = `
-    <input type="text" placeholder="Search column..." class="w-full mb-2 px-2 py-1 border" />
     <button data-dir="asc" class="w-full mb-1 bg-gray-100 hover:bg-gray-200 py-1">Sort Ascending</button>
     <button data-dir="desc" class="w-full bg-gray-100 hover:bg-gray-200 py-1">Sort Descending</button>
 `;
@@ -399,21 +453,24 @@ document.addEventListener("click", (e) => {
 });
 
 // Column search input
-colPopup.querySelector("input").addEventListener("input", (e) => {
-    const col = colPopup.dataset.column;
-    const query = e.target.value.toLowerCase();
-    fullDataCurrentView = fullData.filter(row => {
-        const val = row[col];
-        return val && val.toString().toLowerCase().includes(query);
-    });
-    currentPage = 1;
-    renderPage();
-});
-
-// Press enter in input triggers search
-colPopup.querySelector("input").addEventListener("keydown", e => {
-    if (e.key === "Enter") e.target.dispatchEvent(new Event("input"));
-});
+// Column search input
+//colPopup.querySelector("input").addEventListener("input", (e) => {
+//    refreshCSV()
+//    const col = colPopup.dataset.column;
+//    const query = e.target.value.toLowerCase();
+//    fullDataCurrentView = fullData.filter(row => {
+//        const val = row[col];
+//        return val && val.toString().toLowerCase().includes(query);
+//    });
+//    currentPage = 1;
+//    renderPage();
+//});
+//
+//
+//// Press enter in input triggers search
+//colPopup.querySelector("input").addEventListener("keydown", e => {
+//    if (e.key === "Enter") e.target.dispatchEvent(new Event("input"));
+//});
 
 // Sort buttons
 colPopup.querySelectorAll("button[data-dir]").forEach(btn => {
@@ -451,6 +508,7 @@ const expandContent = document.getElementById('expand-content');
 const tableContainerParent = document.querySelector('main .w-full'); // original parent container
 const tableBlock = document.getElementById('table-container').parentElement; // div containing search, table, download, pagination
 
+let originalClasses = tableBlock.className;
 let originalParent = tableBlock.parentElement;
 let originalNextSibling = tableBlock.nextSibling; // in case we want to reinsert exactly
 
@@ -470,9 +528,7 @@ expandModal.addEventListener('click', (e) => {
         // Hide modal
         expandModal.classList.add('hidden');
 
-        tableBlock.classList.remove('w-full', 'flex-1', 'overflow-auto');
-        tableBlock.classList.add('max-w-6xl', 'mt-24', 'mb-12');
-
+        tableBlock.className = originalClasses;
         toggleChartsBtn.classList.add('hidden');
         if (originalNextSibling) {
             originalParent.insertBefore(tableBlock, originalNextSibling);
