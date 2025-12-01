@@ -134,7 +134,7 @@ function createColumnSummary(values) {
     let summary = "";
 
     if (unique === 0) {
-        summary = `Null Values: ${nullCount}`;
+        summary = `Null: ${nullCount}`;
     } else if (unique === 2) {
         summary = sorted.map(([value, count]) =>
             `${capitalize(value)}: ${count}`
