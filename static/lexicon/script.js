@@ -54,7 +54,7 @@ function showSkeleton() {
 
 function truncateText(str, maxLength = 10) {
     if (!str) return "";
-    return str.length > maxLength ? str.slice(0, 7) + "..." : str;
+    return str.length > maxLength ? str.slice(0, 10) + "..." : str;
 }
 
 // --- Parse CSV ---
@@ -103,6 +103,7 @@ function renderTableHeader(headers) {
             </div>
         `;
         th.className = "px-4 py-2 bg-gray-100 sticky top-0";
+        th.style.minWidth = "150px"; // or any desired width
         tr.appendChild(th);
     });
     thead.appendChild(tr);
@@ -131,30 +132,35 @@ function createColumnSummary(values) {
     const unique = Object.keys(counts).length;
     const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
 
-    let summary = "";
+    let summaryHTML = "";
 
     if (unique === 0) {
-        summary = `Null: ${nullCount}`;
+        summaryHTML = `<div class="flex justify-between"><span>Null</span><span>${nullCount}</span></div>`;
     } else if (unique === 2) {
-        summary = sorted.map(([value, count]) =>
-            `${capitalize(value)}: ${count}`
-        ).join("<br>");
+        summaryHTML = sorted.map(([value, count]) =>
+            `<div class="flex justify-between"><span>${capitalize(value)}</span><span>${count}</span></div>`
+        ).join("");
     } else if (unique < 20) {
         const total = values.length - nullCount;
-        summary = sorted.map(([value, count]) =>
-            `${truncateText(value.toUpperCase())} ${(count / total * 100).toFixed(1)}%`
-        ).join("<br>");
+        summaryHTML = sorted.map(([value, count]) =>
+            `<div class="flex justify-between"><span>${truncateText(value.toUpperCase())}</span><span>${(count / total * 100).toFixed(1)}%</span></div>`
+        ).join("");
     } else {
-        const [topVal, topCount] = sorted[0];
-        summary = `Most frequent: "${truncateText(topVal)}" (${topCount})<br>Unique: ${unique}`;
+        // Top 3 most frequent
+        summaryHTML = `<div>Most Frequent:</div>`;
+        sorted.slice(0, 3).forEach(([value, count]) => {
+            summaryHTML += `<div class="flex justify-between"><span>&nbsp;&nbsp;&nbsp;${truncateText(value)}</span><span>${count}</span></div>`;
+        });
+        summaryHTML += `<div class="flex justify-between"><span>${"Unique"}</span><span>${unique}</span></div>`;
     }
 
-    if (nullCount > 0) {
-        summary += `<br>Null Values: ${nullCount}`;
+    if (nullCount > 0 && unique !== 0) {
+        summaryHTML += `<div class="flex justify-between"><span>Null</span><span>${nullCount}</span></div>`;
     }
 
-    return summary;
+    return summaryHTML;
 }
+
 
 function generateSummaryRow(headers) {
     const thead = document.getElementById("lexicon-thead");
