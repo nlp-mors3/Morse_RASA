@@ -1,6 +1,23 @@
-*{
-  scrollbar-color: rgba(0,0,0,0.4) transparent;
+* {
+  scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
 }
+
+
+/* Custom Scrollbar for Textareas */
+textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 20px;
+}
+
+
 body {
   font-family: "Segoe UI", sans-serif;
   background: #f5f7fa;
@@ -11,6 +28,9 @@ body {
   margin: 0;
 }
 
+body {
+  font-family: 'Inter', sans-serif;
+}
 h1 {
   color: #333;
 }
@@ -476,7 +496,7 @@ index.html
 } 
 */
 
-.main-about-wrapper>#container::-webkit-scrollbar-track-piece{
+.main-about-wrapper>#container::-webkit-scrollbar-track-piece {
   background: #005fcc;
 }
 
@@ -557,4 +577,3 @@ index.html
   border: none;
   cursor: pointer;
 }
-

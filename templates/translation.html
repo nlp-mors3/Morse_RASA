@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <script src="/static/script.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -42,30 +42,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary selection:text-white">
 
-    <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-primary flex items-center gap-2">
-                <i data-feather="arrow-left" class="w-5 h-5"></i>
-                <span>Ibaloi<span class="font-light text-slate-500">NLP</span></span>
-            </a>
-            
-            <div class="hidden md:flex items-center gap-8 font-medium text-sm">
-                <a href="/" class="hover:text-primary transition-colors">Lexicon</a>
-                <a href="/maintenance" class="hover:text-primary transition-colors">Research Paper</a>
-                <a href="https://ibaloi-webapp.vercel.app/" class="hover:text-primary transition-colors">Sentence Builder</a>
-                <span class="text-primary bg-primary/10 px-3 py-1 rounded-full">Translator</span>
-            </div>
-
-            <button class="md:hidden text-slate-700" id="mobile-menu-btn">
-                <i data-feather="menu"></i>
-            </button>
-        </div>
-        
-        <div class="hidden md:hidden bg-white border-t p-4 flex flex-col gap-4 shadow-lg" id="mobile-menu">
-            <a href="/">Home</a>
-            <a href="https://ibaloi-webapp.vercel.app/">Sentence Builder</a>
-        </div>
-    </nav>
+    <div id="navbar"></div>
 
     <main class="container mx-auto px-4 pt-32 pb-12 max-w-6xl">
         

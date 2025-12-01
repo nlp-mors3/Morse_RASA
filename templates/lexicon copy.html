@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="../builder/style.css">
+    <script src="../control/shared/script.js"></script>
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <div id="container">
+        <div class="lexicon-header">
+            <h2>Lexicon Entries</h2>
+            <button id="download-btn">Download</button>
+        </div>
+
+
+        <div id="table-container">
+            <div id="table-controls"></div>
+            <table id="lexicon-table">
+                <thead id="lexicon-thead"></thead>
+                <tbody id="lexicon-tbody"></tbody>
+            </table>
+
+            <div id="pagination-controls">
+                <button id="prev-page">Previous</button>
+                <span id="page-info"></span>
+                <button id="next-page">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../control/lexicon/script.js"></script>
+</body>

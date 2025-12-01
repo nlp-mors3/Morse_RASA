@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="/static/script.js"></script>
+  </head>
+  <body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary selection:text-white">
+    <div id="navbar"></div>
+    <main class="container mx-auto px-4 pt-32 pb-12 max-w-6xl">
+      <div class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div id="container" class="max-w-3xl w-full bg-white shadow-lg rounded-xl p-8 my-8">
+          <h2 class="text-2xl font-bold text-gray-700 mb-4">Pick your main word</h2>
+
+          <!-- WORD LIST -->
+          <div id="word-list" class="word-list flex flex-wrap gap-4 mb-4"></div>
+
+          <!-- SENTENCES -->
+          <div id="sentences" class="space-y-3"></div>
+
+          <button id="add-btn" onclick="addSentencePair()" class="mt-4 bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-lg shadow">+ Add Another Sentence</button>
+
+          <br /><br />
+
+          <button onclick="submitSentences()" class="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded-lg shadow">Submit Sentences</button>
+
+          <div id="status" class="mt-4 text-blue-700 text-sm"></div>
+        </div>
+      </div>
+    </main>
+    <script src="/static/builder/script.js"></script>
+  </body>
+</html>

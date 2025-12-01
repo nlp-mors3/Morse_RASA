@@ -3,7 +3,7 @@ from flask import Flask, render_template
 app = Flask(
     __name__, 
     static_folder="static",
-    template_folder="templates" 
+    template_folder="templates"
 )
 
 # =============================
@@ -55,8 +55,55 @@ def server_error(error):
 def maintenance():
     return render_template("maintenance.html")
 
+@app.route("/navbar")
+def navbar():
+    return render_template("navbar.html")
 
+@app.route("/lexicon")
+def lexicon():
+    data = []
+    #with open('data.csv', 'r') as file:
+    #     csv_reader = csv.DictReader(file)
+    #     for row in csv_reader:
+    #         data.append(row)
+    return render_template("lexicon.html",data=data)
 
+@app.route("/builder")
+def builder():
+    return render_template("builder.html")
+
+import requests
+from flask import request, jsonify
+
+GAS_URL =  "https://script.google.com/macros/s/AKfycbwDsmJEmfVwHGwNWSGEzOB-CMC2Bv1tCXntSJEhe8m1wyFWM7j5IhpwUfksKst0_6Vftw/exec"
+
+@app.route("/proxy", methods=["GET", "POST", "OPTIONS"])
+def proxy():
+    # CORS headers
+    response_headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+    }
+
+    # Preflight request
+    if request.method == "OPTIONS":
+        return ("", 204, response_headers)
+
+    try:
+        if request.method == "GET":
+            gas_response = requests.get(GAS_URL, params=request.args)
+            return (gas_response.text, gas_response.status_code, response_headers)
+
+        elif request.method == "POST":
+            gas_response = requests.post(GAS_URL, json=request.json)
+            return (gas_response.text, gas_response.status_code, response_headers)
+
+        else:
+            return ("Method Not Allowed", 405, response_headers)
+
+    except Exception as e:
+        return (jsonify({"error": str(e)}), 500, response_headers)
 
 
 

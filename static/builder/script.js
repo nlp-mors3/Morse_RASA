@@ -28,11 +28,13 @@ function renderWordSkeletons(count = 5) {
 
   for (let i = 0; i < count; i++) {
     const card = document.createElement("div");
-    card.className = "word-card skeleton-card";
+    card.className = "word-card w-[30%] bg-gray-200 p-4 rounded-xl animate-pulse";
+
     card.innerHTML = `
-      <div class="word skeleton-block"></div>
-      <div class="meta skeleton-block"></div>
+        <div class="h-5 w-3/4 rounded-md skeleton-block mb-2"></div>
+        <div class="h-4 w-1/2 rounded-md skeleton-block"></div>
     `;
+
     container.appendChild(card);
   }
 }
@@ -42,7 +44,8 @@ function renderWords() {
   container.innerHTML = "";
   words.forEach((w, i) => {
     const card = document.createElement("div");
-    card.className = "word-card";
+    card.className = "word-card flex-1 basis-[30%] bg-indigo-50 p-4 rounded-xl text-center cursor-pointer transition hover:bg-indigo-100";
+
     card.innerHTML = `
       <div class="word">${w.word}</div>
       <div class="meta">${w.pos || "-"} | English: ${w.translation || "-"}</div>
@@ -56,7 +59,13 @@ function renderWords() {
 function selectWord(index) {
   selectedWord = words[index];
   document.querySelectorAll(".word-card").forEach((el, i) => {
-    el.classList.toggle("selected", i === index);
+    if (i === index) {
+      el.classList.add("bg-blue-700", "text-white");
+      el.classList.remove("bg-indigo-50");
+    } else {
+      el.classList.remove("bg-blue-700", "text-white");
+      el.classList.add("bg-indigo-50");
+    }
   });
 }
 
@@ -69,10 +78,14 @@ function resetSentences() {
 function addSentencePair() {
   const container = document.getElementById("sentences");
   const div = document.createElement("div");
-  div.className = "sentence-pair";
+  div.className = "sentence-pair flex flex-col bg-gray-50 p-4 rounded-lg shadow-sm";
   div.innerHTML = `
-      <input type="text" placeholder="Ibaloi sentence (must use main word)" class="ibaloi">
-      <input type="text" placeholder="English translation" class="english">
+      <input type="text"
+          placeholder="Ibaloi sentence (must use main word)"
+          class="ibaloi border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+      <input type="text"
+          placeholder="English translation"
+          class="english border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 mt-2">
     `;
   container.appendChild(div);
 }
