@@ -146,7 +146,7 @@ function createColumnSummary(values) {
         ).join("<br>");
     } else {
         const [topVal, topCount] = sorted[0];
-        summary = `Most frequent: "${topVal}" (${topCount})<br>Unique: ${unique}`;
+        summary = `Most frequent: "${truncateText(topVal)}" (${topCount})<br>Unique: ${unique}`;
     }
 
     if (nullCount > 0) {
@@ -496,6 +496,7 @@ function populateDownloadColumns() {
 
     columnNames.forEach((col, idx) => {
         const id = `dl-col-${idx}`;
+        col = formatHeader(col);
         container.innerHTML += `
             <div class="flex items-center mb-1">
                 <input type="checkbox" id="${id}" class="mr-2 dl-col" checked>
