@@ -15,6 +15,8 @@ async function loadCSV(path) {
 
 feather.replace();
 
+showSkeleton();
+
 // Usage:
 loadCSV("https://docs.google.com/spreadsheets/d/1iaKr-e3DG8S5fNR2ht1053DzqNSyV6dgbkj43_SMhdM/export?format=csv&gid=0")
     .then(csvText => {
@@ -24,6 +26,36 @@ loadCSV("https://docs.google.com/spreadsheets/d/1iaKr-e3DG8S5fNR2ht1053DzqNSyV6d
         renderPage();
     })
     .catch(err => console.error(err));
+
+function showSkeleton() {
+    const tbody = document.getElementById("lexicon-tbody");
+    const thead = document.getElementById("lexicon-thead");
+
+    // Skeleton header
+    thead.innerHTML = `<tr>
+        <th class="px-4 py-2 bg-gray-100 animate-pulse">Loading...</th>
+        <th class="px-4 py-2 bg-gray-100 animate-pulse">Loading...</th>
+        <th class="px-4 py-2 bg-gray-100 animate-pulse">Loading...</th>
+        <th class="px-4 py-2 bg-gray-100 animate-pulse">Loading...</th>
+        <th class="px-4 py-2 bg-gray-100 animate-pulse">Loading...</th>
+        <th class="px-4 py-2 bg-gray-100 animate-pulse">Loading...</th>
+        <th class="px-4 py-2 bg-gray-100 animate-pulse">Loading...</th>
+        <th class="px-4 py-2 bg-gray-100 animate-pulse">Loading...</th>
+    </tr>`;
+
+    // Skeleton rows
+    tbody.innerHTML = "";
+    for (let i = 0; i < 5; i++) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = Array(8).fill('<td class="px-4 py-2"><div class="h-4 bg-gray-200 rounded animate-pulse"></div></td>').join("");
+        tbody.appendChild(tr);
+    }
+}
+
+function truncateText(str, maxLength = 10) {
+    if (!str) return "";
+    return str.length > maxLength ? str.slice(0, 7) + "..." : str;
+}
 
 // --- Parse CSV ---
 function parseCSV(csvText) {
@@ -55,6 +87,7 @@ function formatHeader(header) {
 
 // --- Render Table Header ---
 function renderTableHeader(headers) {
+    columnNames = [];
     const thead = document.getElementById("lexicon-thead");
     thead.innerHTML = "";
 
@@ -109,7 +142,7 @@ function createColumnSummary(values) {
     } else if (unique < 20) {
         const total = values.length - nullCount;
         summary = sorted.map(([value, count]) =>
-            `${value.toUpperCase()} ${(count / total * 100).toFixed(1)}%`
+            `${truncateText(value.toUpperCase())} ${(count / total * 100).toFixed(1)}%`
         ).join("<br>");
     } else {
         const [topVal, topCount] = sorted[0];
@@ -126,25 +159,109 @@ function createColumnSummary(values) {
 function generateSummaryRow(headers) {
     const thead = document.getElementById("lexicon-thead");
 
-    // Remove previous summary row if exists
-    if (thead.rows.length > 1) thead.deleteRow(1);
+    // Remove previous summary/chart rows if exist
+    while (thead.rows.length > 1) {
+        thead.deleteRow(1);
+    }
 
-    const summaryRow = document.createElement("tr");
-    summaryRow.className = "bg-gray-50 text-gray-600 text-xs"; // Tailwind styling
+    // ------------------------
+    // Chart Row (hidden by default)
+    // ------------------------
+    const chartRow = document.createElement("tr");
+    chartRow.className = "bg-gray-50 text-gray-600 text-xs hidden"; // hidden by default
+    chartRow.dataset.chartRow = "true"; // optional identifier
 
     headers.forEach(header => {
         const td = document.createElement("td");
         td.className = "px-4 py-2 border-t border-gray-200";
 
-        // Get all values for this column from current full data
+        const canvas = document.createElement("canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100px"; // adjust as needed
+        td.appendChild(canvas);
+        chartRow.appendChild(td);
+
+        // Prepare chart data
+        const colValues = fullData.map(row => row[header]);
+        const counts = {};
+        colValues.forEach(v => {
+            const key = v ? v.toString().trim() : "Null";
+            counts[key] = (counts[key] || 0) + 1;
+        });
+
+        const labels = Object.keys(counts);
+        const data = Object.values(counts);
+
+        new Chart(canvas, {
+            type: 'pie',
+            data: {
+                labels,
+                datasets: [{
+                    data,
+                    backgroundColor: labels.map(() => `hsl(${Math.random() * 360}, 70%, 60%)`),
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                const label = ctx.label || '';
+                                const value = ctx.raw || 0;
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                const pct = ((value / total) * 100).toFixed(1);
+                                return `${label}: ${value} (${pct}%)`;
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    });
+
+    thead.appendChild(chartRow);
+
+    
+    // ------------------------
+    // Summary Text Row
+    // ------------------------
+    const summaryRow = document.createElement("tr");
+    summaryRow.className = "bg-gray-50 text-gray-600 text-xs min-h-[50px]";
+    summaryRow.style.verticalAlign = "top";
+
+    headers.forEach(header => {
+        const td = document.createElement("td");
+        td.className = "px-4 py-2 border-t border-gray-200";
+
+        // Get all values for this column
         const colValues = fullData.map(row => row[header]);
 
-        td.innerHTML = `<span class="font-medium">${createColumnSummary(colValues)}</span>`;
+        td.innerHTML = `<span class="font-medium block break-words">${createColumnSummary(colValues)}</span>`;
         summaryRow.appendChild(td);
     });
 
     thead.appendChild(summaryRow);
+
 }
+
+
+
+const toggleSummaryBtn = document.getElementById("toggle-summary");
+let summaryVisible = true;
+
+toggleSummaryBtn.addEventListener("click", () => {
+    const thead = document.getElementById("lexicon-thead");
+    if (thead.rows.length > 1) {
+        const summaryRow = thead.rows[1];
+        summaryRow.style.display = summaryVisible ? "none" : "";
+        summaryVisible = !summaryVisible;
+    }
+});
 
 
 // --- Render Table Rows ---
@@ -325,9 +442,10 @@ let originalNextSibling = tableBlock.nextSibling; // in case we want to reinsert
 expandBtn.addEventListener('click', () => {
     expandContent.appendChild(tableBlock);
     tableBlock.classList.add('w-full', 'flex-1', 'overflow-auto');
-    tableBlock.classList.remove('max-w-6xl','mt-24', 'mb-12');
+    tableBlock.classList.remove('max-w-6xl', 'mt-24', 'mb-12');
     expandBtn.style.display = 'none';
     expandModal.classList.remove('hidden');
+    document.querySelectorAll('thead tr[data-chart-row]').forEach(r => r.classList.remove('hidden'));
 });
 
 expandModal.addEventListener('click', (e) => {
@@ -339,7 +457,7 @@ expandModal.addEventListener('click', (e) => {
         tableBlock.classList.remove('w-full', 'flex-1', 'overflow-auto');
 
         // Restore max-width
-        tableBlock.classList.add('max-w-6xl','mt-24', 'mb-12');
+        tableBlock.classList.add('max-w-6xl', 'mt-24', 'mb-12');
 
         // Move table block back to original location
         if (originalNextSibling) {
@@ -347,7 +465,7 @@ expandModal.addEventListener('click', (e) => {
         } else {
             originalParent.appendChild(tableBlock);
         }
-
+        document.querySelectorAll('thead tr[data-chart-row]').forEach(r => r.classList.add('hidden'));
         // Restore expand button
         expandBtn.style.display = '';
     }
@@ -396,18 +514,21 @@ document.getElementById("download-confirm").addEventListener("click", () => {
 function escapeCSV(value) {
     if (value == null) return "";
     const v = value.toString();
-    return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
+    return /[",\n]/.test(v)
+        ? `"${v.replace(/"/g, '""')}"`
+        : v;
 }
 
 
 function generateCSV(data, columns) {
     if (!data || data.length === 0) return "";
 
-    // Header
+    // Header row
     const header = columns.map(i => escapeCSV(columnNames[i])).join(",");
 
+    // Data rows
     const rows = data.map(row =>
-        columns.map(i => escapeCSV(row[i] ?? "")).join(",")
+        columns.map(i => escapeCSV(row[columnNames[i]] ?? "")).join(",")
     );
 
     return [header, ...rows].join("\n");

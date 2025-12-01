@@ -68,6 +68,10 @@ def lexicon():
     #         data.append(row)
     return render_template("lexicon.html",data=data)
 
+@app.route("/lexicon-browse")
+def lexiconBrowse():
+    return render_template("lexicon browser.html")
+
 @app.route("/builder")
 def builder():
     return render_template("builder.html")
