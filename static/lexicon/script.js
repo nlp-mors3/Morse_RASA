@@ -231,6 +231,7 @@ function generateSummaryRow(headers) {
     // Summary Text Row
     // ------------------------
     const summaryRow = document.createElement("tr");
+    summaryRow.dataset.summaryRow = "true";
     summaryRow.className = "bg-gray-50 text-gray-600 text-xs min-h-[50px]";
     summaryRow.style.verticalAlign = "top";
 
@@ -249,20 +250,28 @@ function generateSummaryRow(headers) {
 
 }
 
-
-
 const toggleSummaryBtn = document.getElementById("toggle-summary");
 let summaryVisible = true;
 
 toggleSummaryBtn.addEventListener("click", () => {
-    const thead = document.getElementById("lexicon-thead");
-    if (thead.rows.length > 1) {
-        const summaryRow = thead.rows[1];
-        summaryRow.style.display = summaryVisible ? "none" : "";
-        summaryVisible = !summaryVisible;
-    }
+    const summaryRow = document.querySelector('thead tr[data-summary-row]');
+    if (!summaryRow) return;
+
+    summaryRow.style.display = summaryVisible ? "none" : "";
+    summaryVisible = !summaryVisible;
 });
 
+
+const toggleChartsBtn = document.getElementById("toggle-charts");
+
+let chartsVisible = true; // default visible when expanded
+
+toggleChartsBtn.addEventListener('click', () => {
+    document.querySelectorAll('thead tr[data-chart-row]').forEach(r => {
+        r.style.display = chartsVisible ? "none" : "";
+    });
+    chartsVisible = !chartsVisible;
+});
 
 // --- Render Table Rows ---
 function renderTableRows(data) {
@@ -443,9 +452,11 @@ expandBtn.addEventListener('click', () => {
     expandContent.appendChild(tableBlock);
     tableBlock.classList.add('w-full', 'flex-1', 'overflow-auto');
     tableBlock.classList.remove('max-w-6xl', 'mt-24', 'mb-12');
+    toggleChartsBtn.classList.remove('hidden');
     expandBtn.style.display = 'none';
     expandModal.classList.remove('hidden');
     document.querySelectorAll('thead tr[data-chart-row]').forEach(r => r.classList.remove('hidden'));
+    //chartsVisible = true;
 });
 
 expandModal.addEventListener('click', (e) => {
@@ -453,13 +464,10 @@ expandModal.addEventListener('click', (e) => {
         // Hide modal
         expandModal.classList.add('hidden');
 
-        // Remove stretching classes
         tableBlock.classList.remove('w-full', 'flex-1', 'overflow-auto');
-
-        // Restore max-width
         tableBlock.classList.add('max-w-6xl', 'mt-24', 'mb-12');
 
-        // Move table block back to original location
+        toggleChartsBtn.classList.add('hidden');
         if (originalNextSibling) {
             originalParent.insertBefore(tableBlock, originalNextSibling);
         } else {
@@ -468,6 +476,7 @@ expandModal.addEventListener('click', (e) => {
         document.querySelectorAll('thead tr[data-chart-row]').forEach(r => r.classList.add('hidden'));
         // Restore expand button
         expandBtn.style.display = '';
+        //chartsVisible = false;
     }
 });
 
