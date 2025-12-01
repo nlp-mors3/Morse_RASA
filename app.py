@@ -16,19 +16,20 @@ def home():
 
 @app.route("/rasa-translator")
 def rasa_translator():
-    return render_template("rasa.html")
+    return render_template("translation.html")
+
+@app.route("/research-paper")
+def research_paper():
+    return render_template("research.html")
+
 
 # =============================
 # ADMIN PAGE ROUTES
 # =============================
 
-@app.route("/")
+@app.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html")
-
-@app.route("/translator")
-def translator():
-    return render_template("translation.html")
 
 # =============================
 # ERROR HANDLER ROUTES
