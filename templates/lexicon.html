@@ -1,0 +1,98 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<div id='main-container' class="bg-slate-50 font-sans flex flex-col items-center min-h-screen">
+    <div id="expand-modal" class="hidden fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+        <div id="expand-content" class="bg-white p-4 rounded-lg w-[90vw] h-[80vh] flex flex-col">
+        <!-- Table block will be moved here -->
+        </div>
+    </div>
+
+
+    <div id="download-modal" class="hidden fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+        <div class="bg-white p-4 rounded-lg max-w-md w-full">
+            <h3 class="text-lg font-bold mb-2">Download CSV</h3>
+            <div id="download-columns" class="mb-2"></div>
+                <div class="flex items-center mb-2">
+                    <input type="checkbox" id="download-filtered" class="mr-2"/>
+                    <label for="download-filtered">Download only filtered data</label>
+                </div>
+            <div class="flex justify-end space-x-2">
+                <button id="download-cancel" class="px-4 py-1 rounded border">Cancel</button>
+                <button id="download-confirm" class="px-4 py-1 rounded bg-blue-500 text-white">Download</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="w-full max-w-6xl p-6 mt-24 mb-12">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-700">Lexicon Entries</h2>
+                <div class="flex items-center justify-between mb-2">
+                    <div id="search-section" class="relative w-full md:w-1/2 min-w-[100%]">
+                        <input id="general-search" type="text" placeholder="Search"
+                            class="sync-input border rounded px-10 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"/>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                            <i data-feather="search"></i>
+                        </span>
+                    </div> 
+                </div>
+            </div>
+
+
+            <div>
+                <button id="toggle-summary" class="mb-2 px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">
+                    <i data-feather="bar-chart-2" class="w-5 h-5">></i>
+                </button>
+                <button id="toggle-charts" class="mb-2 px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded hidden">
+                    <i data-feather="pie-chart" class="w-5 h-5">></i>
+                </button>
+
+                <button id="download-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow">
+                    <i data-feather="download" class="w-5 h-5">></i>
+                </button>
+                <button id="expand-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow">
+                    <i data-feather="maximize" class="w-5 h-5">></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Table Container -->
+        <div id="table-container" class="overflow-x-auto max-h-[60vh] border rounded-md">
+            <table id="lexicon-table" class="min-w-full border-collapse">
+                <thead id="lexicon-thead"></thead>
+                <tbody id="lexicon-tbody">
+                    <tr>
+                        <td colspan="8" class="animate-pulse py-2">
+                            <div class="h-4 bg-gray-200 rounded w-full"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" class="animate-pulse py-2">
+                            <div class="h-4 bg-gray-200 rounded w-full"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" class="animate-pulse py-2">
+                            <div class="h-4 bg-gray-200 rounded w-full"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+    <!-- Pagination -->
+        <div id="pagination-controls" class="flex justify-between items-center mt-4">
+            <button id="prev-page" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Previous</button>
+            <span id="page-info" class="text-gray-700 font-medium"></span>
+            <button id="next-page" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next</button>
+        </div>
+    </main>
+</div>

@@ -1,0 +1,122 @@
+import pandas as pd
+import re
+import yaml
+
+# variables for input and output files 
+input_file='' #file name to be decided, good if input from admin side
+output_file='translationOperation.yml'
+
+#main func
+"""
+Cleans text to be suitable for Rasa NLU examples.
+Removes special characters but keeps hyphens (common in Ibaloi).
+"""
+def clean_text(text):
+
+    if pd.isna(text) or text == "":
+        return None
+    # Convert to string, strip whitespace, remove quotes/brackets
+    text = str(text).strip().lower()
+    text = re.sub(r'[";]', '', text) # Remove specific noisy chars
+    return text
+
+"""
+Generates NLU yml file for RASA model training and deployment
+"""
+def generate_nlu(csv_path, output_path):
+    print(f"Reading {csv_path}...")
+    
+    try:
+        # Load CSV
+        df = pd.read_csv(csv_path)
+    except FileNotFoundError:
+        print(f"Error: Could not find file '{csv_path}'. Please check the filename.")
+        return
+
+    # Lists to store unique words for lookup tables
+    ibaloi_lookup = set()
+    english_lookup = set()
+
+    # Iterate through the CSV to populate lists
+    for index, row in df.iterrows():
+        # Process Ibaloi Word
+        ibaloi_word = clean_text(row.get('word'))
+        if ibaloi_word:
+            ibaloi_lookup.add(ibaloi_word)
+
+        # Process English Translation
+        # English column sometimes has multiple comma-separated words (e.g., "get, take")
+        eng_raw = row.get('englishTranslation')
+        if pd.notna(eng_raw):
+            # Split by commas to get individual English synonyms
+            synonyms = str(eng_raw).split(',')
+            for syn in synonyms:
+                cleaned_syn = clean_text(syn)
+                if cleaned_syn:
+                    english_lookup.add(cleaned_syn)
+
+    # --- Construct the NLU Data Structure ---
+    
+    # 1. Create Lookup Tables (The list of valid words)
+    # We sort them to keep the file organized
+    nlu_data = {
+        "version": "3.1",
+        "nlu": [
+            {
+                "lookup": "ibaloi_word",
+                "examples": sorted(list(ibaloi_lookup))
+            },
+            {
+                "lookup": "english_word",
+                "examples": sorted(list(english_lookup))
+            },
+            # 2. Create Intent: Translate English -> Ibaloi
+            {
+                "intent": "translate_to_ibaloi",
+                "examples": [
+                    "What is [house](english_word) in Ibaloi?",
+                    "How do you say [morning](english_word)?",
+                    "Translate [relatives](english_word) for me",
+                    "Ibaloi word for [children](english_word)",
+                    "What is the translation for [shoulder](english_word)?",
+                    "How to say [go forward](english_word) in Ibaloi",
+                    "[hut](english_word) meaning in Ibaloi",
+                    "give me the word for [worried](english_word)",
+                    "translate [liquor](english_word)",
+                    "how do I say [slowly](english_word)?"
+                ]
+            },
+            # 3. Create Intent: Translate Ibaloi -> English
+            {
+                "intent": "translate_to_english",
+                "examples": [
+                    "What does [baley](ibaloi_word) mean?",
+                    "Translate [agsapa](ibaloi_word) to English",
+                    "Meaning of [a-anak](ibaloi_word)",
+                    "Define [abada](ibaloi_word)",
+                    "What is [abante](ibaloi_word) in English?",
+                    "English for [abolan](ibaloi_word)",
+                    "What does [aburido](ibaloi_word) mean?",
+                    "tell me the meaning of [addak](ibaloi_word)",
+                    "translate [adonei](ibaloi_word)",
+                    "definition of [a-adok](ibaloi_word)"
+                ]
+            }
+        ]
+    }
+
+    # Write to YAML file
+    print(f"Writing NLU data to {output_path}...")
+    
+    # Custom Dumper to format YAML nicely (block style for lists)
+    class MyDumper(yaml.SafeDumper):
+        def increase_indent(self, flow=False, indentless=False):
+            return super(MyDumper, self).increase_indent(flow, False)
+
+    with open(output_path, 'w', encoding='utf-8') as file:
+        yaml.dump(nlu_data, file, Dumper=MyDumper, default_flow_style=False, sort_keys=False, allow_unicode=True)
+
+    print("Success! Copy the contents of 'nlu_generated.yml' to your Rasa 'data/nlu.yml' file.")
+
+if __name__ == "__main__":
+    generate_nlu(input_csv_file, output_nlu_file)

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link rel="stylesheet" href="../builder/style.css">
+    <script src="../control/shared/script.js"></script>
+</head>
+
+<body>
+
+    <!-- Background Slideshow -->
+    <div id="bg-slideshow"></div>
+    <div id="bg-overlay"></div>
+
+    <div id="navbar"></div>
+
+    <!-- Main Combined Container -->
+    <div class="main-about-wrapper">
+
+        <!-- Left: About Content -->
+        <div id ="container">
+            <div id="about-left">
+                <h1>About Us</h1>
+
+                <div class="paragraph-wrapper">
+                    <div class="paragraph-content" id="about-paragraph">
+                        Our lexicon initiative is dedicated to providing an extensible, high-quality,
+                        research-grade linguistic dataset for natural language processing and applied
+                        machine learning. We aim to support transparent and data-rich AI systems.
+Our lexicon initiative is dedicated to providing an extensible, high-quality,
+                        research-grade linguistic dataset for natural language processing and applied
+                        machine learning. We aim to support transparent and data-rich AI systems.Our lexicon initiative is dedicated to providing an extensible, high-quality,
+                        research-grade linguistic dataset for natural language processing and applied
+                        machine learning. We aim to support transparent and data-rich AI systems.
+
+
+                        s
+                    </div>
+                    <button id="seeMoreBtn" class="seeMoreBtn">See more</button>
+                </div>
+
+                <div id="about-sections">
+                    <div class="section-box">
+                        <h2>Our Mission</h2>
+                        <p>
+                            To create a robust, open, and ethically sourced lexicon that empowers
+                            machine learning applications and supports global NLP research.
+                        </p>
+                    </div>
+
+                    <div class="section-box">
+                        <h2>Our Team</h2>
+                        <p>
+                        Project Lead: x<br>
+                        Backend Developer: x<br>
+                        Frontend Developer: x<br>
+                        Lexicon: x<br>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- CONTACT ICON BUTTONS -->
+                <div id="contact-icons">
+                    <button class="circle-btn" data-link="mailto:your-email@example.com">
+                        ✉️
+                    </button>
+                    <button class="circle-btn" data-link="https://facebook.com/yourpage">
+                        📘
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <!-- Right: Logo Container -->
+        <div id="logo-container">
+            <img src="../assets/SAMCIS.png" id="logo-image">
+        </div>
+
+    </div>
+
+    <!-- Link Confirmation Modal -->
+    <div id="link-modal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to open this link?</p>
+            <div class="modal-btns">
+                <button id="modal-cancel">Cancel</button>
+                <button id="modal-open">Open</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../control/about.js"></script>
+</body>
+
+</html>

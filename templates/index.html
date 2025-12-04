@@ -8,7 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -27,7 +28,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary selection:text-white">
 
-    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300 max" id="navbar">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="/" class="text-2xl font-bold text-primary flex items-center gap-2">
                 <i data-feather="book-open" class="w-6 h-6"></i>
@@ -35,10 +36,10 @@
             </a>
             
             <div class="hidden md:flex items-center gap-8 font-medium text-sm">
-                <a href="#lexicon" class="hover:text-primary transition-colors">Lexicon</a>
+                <a href="/lexicon-browse" class="hover:text-primary transition-colors">Lexicon</a>
                 <a href="#research" class="hover:text-primary transition-colors">Research Paper</a>
-                <a href="https://ibaloi-webapp.vercel.app/" class="hover:text-primary transition-colors">Sentence Builder</a>
-                <a href="/translator" class="hover:text-primary transition-colors">RASA Translator</a>
+                <a href="/builder" class="hover:text-primary transition-colors">Sentence Builder</a>
+                <a href="/rasa-translator" class="hover:text-primary transition-colors">RASA Translator</a>
                 <a href="#about" class="px-5 py-2.5 bg-primary text-white rounded-full hover:bg-secondary transition-colors shadow-lg shadow-primary/30">About Us</a>
             </div>
 
@@ -48,9 +49,9 @@
         </div>
         
         <div class="hidden md:hidden bg-white border-t p-4 flex flex-col gap-4 shadow-lg" id="mobile-menu">
-            <a href="#lexicon">Lexicon</a>
+            <a href="/lexicon-browse">Lexicon</a>
             <a href="#research">Research Paper</a>
-            <a href="/sentence-builder">Sentence Builder</a>
+            <a href="/builder">Sentence Builder</a>
             <a href="https://ibaloi-webapp.vercel.app/">RASA Translator</a>
             <a href="#about">About Us</a>
         </div>
@@ -73,14 +74,14 @@
                 <div class="pl-4 text-slate-400">
                     <i data-feather="search" class="w-5 h-5"></i>
                 </div>
-                <input type="text" placeholder="Search the Ibaloi Lexicon..." class="w-full bg-transparent border-none outline-none text-slate-700 placeholder-slate-400 h-10">
-                <button class="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-full font-medium transition-colors">
+                <input type="text" id ="general-search2" placeholder="Search the Ibaloi Lexicon..." class="sync-input w-full bg-transparent border-none outline-none text-slate-700 placeholder-slate-400 h-10">
+                <button id="search-btn" class="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-full font-medium transition-colors">
                     Search
                 </button>
             </div>
         </div>
     </header>
-
+    <section id="table"></section>
     <main class="container mx-auto px-6 py-16 -mt-10 relative z-20">
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
@@ -97,8 +98,8 @@
                 <p class="text-sm text-slate-500 uppercase tracking-wide">Classifier Architecture</p>
             </div>
         </div>
-
-        <section id="research" class="mb-24">
+        
+        <section id="research" class="mb-24 scroll-mt-20">
             <div class="flex flex-col md:flex-row gap-12 items-center">
                 <div class="w-full md:w-1/2">
                     <h2 class="text-3xl font-bold text-slate-800 mb-6">Bridging Tradition with Technology</h2>
@@ -121,21 +122,23 @@
                 </div>
                 <div class="w-full md:w-1/2">
                     <div class="bg-gradient-to-br from-primary to-secondary p-1 rounded-2xl shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-500">
-                        <div class="bg-white rounded-xl p-8 overflow-hidden">
-                            <div class="flex items-center justify-between mb-4 border-b pb-4">
-                                <span class="text-xs font-bold text-slate-400">PAPER ABSTRACT</span>
-                                <span class="text-xs text-slate-400">2024</span>
+                        <a href="/research-paper">
+                            <div class="bg-white rounded-xl p-8 overflow-hidden">
+                                <div class="flex items-center justify-between mb-4 border-b pb-4">
+                                    <span class="text-xs font-bold text-slate-400">PAPER ABSTRACT</span>
+                                    <span class="text-xs text-slate-400">2025   </span>
+                                </div>
+                                <h3 class="text-xl font-bold mb-3">Constructing a Structured Ibaloi Lexicon through Digital Resource Collection</h3>
+                                <p class="text-sm text-slate-500 leading-relaxed">
+                                This study proposed an attempt to further enrich understanding and usage of the Ibaloi language using Natural Language Processing, precisely, the machine translation and language inference part. A lexicon is created using both secondary sources over the internet and a first-hand list of sentences that was interpreted and written by Ibaloi users. Doing so, the resources aim to provide insights on integration of NLP to languages and dialects so as to preserve them through usage. 
+                                </p>
+                                <div class="mt-6 flex gap-2">
+                                    <span class="px-2 py-1 bg-slate-100 text-xs rounded text-slate-600">#Ibaloi</span>
+                                    <span class="px-2 py-1 bg-slate-100 text-xs rounded text-slate-600">#Lexicon</span>
+                                    <span class="px-2 py-1 bg-slate-100 text-xs rounded text-slate-600">#NLP</span>
+                                </div>
                             </div>
-                            <h3 class="text-xl font-bold mb-3">Computational Linguistics for Ibaloi</h3>
-                            <p class="text-sm text-slate-500 leading-relaxed">
-                                "This study presents a novel approach to digitizing the Ibaloi language using an enhanced RASA NLU pipeline. By compiling a structured lexicon of over 2,000 roots..."
-                            </p>
-                            <div class="mt-6 flex gap-2">
-                                <span class="px-2 py-1 bg-slate-100 text-xs rounded text-slate-600">#NLP</span>
-                                <span class="px-2 py-1 bg-slate-100 text-xs rounded text-slate-600">#RASA</span>
-                                <span class="px-2 py-1 bg-slate-100 text-xs rounded text-slate-600">#LowResource</span>
-                            </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -148,7 +151,7 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
-                <a href="/lexicon" class="card group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary/20 transition-all">
+                <a href="/lexicon-browse" class="card group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary/20 transition-all">
                     <div class="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
                         <i data-feather="list"></i>
                     </div>
@@ -159,7 +162,7 @@
                     <span class="text-sm font-semibold text-primary group-hover:translate-x-1 transition-transform inline-block">Browse Dictionary &rarr;</span>
                 </a>
 
-                <a href="/sentence-builder" class="card group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary/20 transition-all">
+                <a href="/builder" class="card group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary/20 transition-all">
                     <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                         <i data-feather="layers"></i>
                     </div>
@@ -170,7 +173,7 @@
                     <span class="text-sm font-semibold text-blue-600 group-hover:translate-x-1 transition-transform inline-block">Start Building &rarr;</span>
                 </a>
 
-                <a href="/translator" class="card group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary/20 transition-all">
+                <a href="/rasa-translator" class="card group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary/20 transition-all">
                     <div class="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                         <i data-feather="message-square"></i>
                     </div>
@@ -203,22 +206,34 @@
             &copy; 2025 NLP Team Mors3. All rights reserved.
         </div>
     </footer>
-
+    
     <script>
         // Initialize Icons
         feather.replace();
 
         // Navbar Scroll Effect
         const nav = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 20) {
-                nav.classList.add('shadow-md', 'bg-white/90', 'backdrop-blur-md');
-                nav.classList.remove('bg-transparent');
-            } else {
-                nav.classList.remove('shadow-md', 'bg-white/90', 'backdrop-blur-md');
-                nav.classList.add('bg-transparent');
-            }
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+        nav.classList.add('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+        nav.classList.remove('bg-transparent');
+
+        // Make children dark
+        navLinks.forEach(el => {
+            el.classList.remove('text-white');
+            el.classList.add('text-slate-800');
         });
+    } else {
+        nav.classList.remove('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+        nav.classList.add('bg-transparent');
+
+        // Make children white
+        navLinks.forEach(el => {
+            el.classList.remove('text-slate-800');
+            el.classList.add('text-white');
+        });
+    }
+});
 
         // Mobile Menu Toggle
         const btn = document.getElementById('mobile-menu-btn');
@@ -226,6 +241,30 @@
         btn.addEventListener('click', () => {
             menu.classList.toggle('hidden');
         });
+        fetch("/lexicon")
+                .then(res => res.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const tableBlock = doc.getElementById('main-container'); // or your #table-block
+                    //doc.getElementById('search-section').style.display = 'none';
+                    document.getElementById("table").appendChild(tableBlock);
+
+                    const s = document.createElement("script");
+                    s.src = "/static/lexicon/script.js";
+                    document.body.appendChild(s);
+                });
+        document.getElementById("table").style.display = 'none';
+        document.getElementById('search-btn').addEventListener('click', () =>{
+            document.getElementById('table').style.display = '';
+            document.getElementById('general-search').value =  document.getElementById('general-search2').value
+            location.href = '#table'
+        });
+        document.getElementById('general-search2').addEventListener('keypress', e =>{
+            if (e.key === 'Enter') 
+                document.getElementById('search-btn').click();
+        });
+
     </script>
 </body>
 </html>

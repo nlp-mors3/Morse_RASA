@@ -1,0 +1,37 @@
+      /* Glass Navbar Base State */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+body {
+    font-family: 'Inter', sans-serif;
+}
+/* Custom Scrollbar for Textareas */
+textarea::-webkit-scrollbar {
+    width: 8px;
+}
+textarea::-webkit-scrollbar-track {
+    background: transparent;
+}
+textarea::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 20px;
+}
+
+/* Skeleton animation */
+@keyframes skeleton {
+0% {
+    background-color: #e3e3e3;
+}
+50% {
+    background-color: #f0f0f0;
+}
+100% {
+    background-color: #e3e3e3;
+}
+}
+.skeleton-block {
+    animation: skeleton 1.2s infinite ease-in-out;
+}

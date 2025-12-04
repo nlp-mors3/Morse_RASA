@@ -1,0 +1,1 @@
+place the lexicon under RASA_model/data, so that the script will scrape the lexicon and to be deployed into the RASA Model

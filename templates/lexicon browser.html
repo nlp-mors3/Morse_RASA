@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lexicon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="/static/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary selection:text-white">
+    <div id="navbar"></div>
+    <div id="table"></div>
+    <script>
+    fetch("/lexicon")
+        .then(res => res.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+        
+            const block = doc.getElementById("main-container");
+            document.getElementById("table").appendChild(block);
+        
+            // ensure script runs after DOM is added
+            const s = document.createElement("script");
+            s.src = "/static/lexicon/script.js";
+            document.body.appendChild(s);            
+        });
+    </script>
+</body>
+
+
+</html>

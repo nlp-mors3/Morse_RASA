@@ -1,0 +1,65 @@
+html { 
+    scroll-behavior: smooth; 
+}
+        
+body { 
+    font-family: 'Inter', sans-serif; 
+}
+
+/* Scrollbar styling for a cleaner look */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Active highlight for the TOC links */
+.toc-link.active {
+    font-weight: 600;
+    color: #1e40af; /* Blue-800 */
+    background-color: #eff6ff; /* Blue-50 */
+    border-left: 3px solid #3b82f6; /* Blue-500 */
+}
+
+/* --- 1. Sidebar Width and Transition --- */
+#toc-sidebar {
+    width: 16rem; /* Default width (w-64) */
+    transition: width 0.3s ease;
+}
+#toc-sidebar.collapsed {
+    width: 4rem; /* Collapsed width (w-16) */
+}
+
+/* --- 2. Content Margin and Transition --- */
+#content-wrapper {
+    margin-left: 16rem; /* Default margin (ml-64) */
+    transition: margin-left 0.3s ease;
+}
+#content-wrapper.content-shifted {
+    margin-left: 4rem; /* Collapsed margin (ml-16) */
+}
+        
+/* --- 3. TOC Nav Content Visibility (used when sidebar is open) --- */
+#toc-nav {
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+#toc-nav.hidden-content {
+    max-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    overflow: hidden;
+}
+
+/* Utility class to rotate the arrow icon */
+/* Rotated state now means it points right (to expand) */
+#collapse-icon.rotated {
+    transform: rotate(-180deg);
+}
+        
+/* Hidden class for text labels when collapsed */
+.hidden-on-collapse {
+    opacity: 1;
+    transition: opacity 0.1s;
+}
+#toc-sidebar.collapsed .hidden-on-collapse {
+    opacity: 0;
+}
