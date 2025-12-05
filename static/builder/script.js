@@ -1,11 +1,11 @@
-const API_URL = "/api/proxy"; let words = [];
+const API_URL = "/proxy"; let words = [];
 let selectedWord = null;
 
 async function fetchWords() {
   try {
     renderWordSkeletons();
 
-    let res = await fetch(API_URL + "?count=5");
+    let res = await fetch(API_URL);
     let data = await res.json();
 
     if (Array.isArray(data) && data.length > 0) {

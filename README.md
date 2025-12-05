@@ -32,6 +32,19 @@ then the main thing
    ```
 
 5. Open `index.html` and start translating.
+## Application Setup
+
+1.  **Clone this repository.**
+2.  **Install Python Dependencies**:
+    ```bash
+    pip install flask requests python-docx
+    ```
+3.  **Run the Application**:
+    ```bash
+    python app.py
+    ```
+4.  **Open in Browser**:
+    Go to [http://localhost:8080](http://localhost:8080) to start using the application.
 
 ## Notes
 
