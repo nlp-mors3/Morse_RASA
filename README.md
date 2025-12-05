@@ -15,23 +15,19 @@ install necessary tools
 then the main thing
 `pip install rasa`
 
-## Sentence Builder Setup
+## Application Setup
 
-1. Clone this repository.
-2. Install dependencies for the proxy:
-
-   ```bash
-   npm install
-   ```
-
-3. Configure the Google Apps Script web app and update `GAS_URL` in `proxy.js`.
-4. Start the proxy (which builds the builder):
-
-   ```bash
-   node proxy.js
-   ```
-
-5. Open `index.html` and start translating.
+1.  **Clone this repository.**
+2.  **Install Python Dependencies**:
+    ```bash
+    pip install flask requests python-docx
+    ```
+3.  **Run the Application**:
+    ```bash
+    python app.py
+    ```
+4.  **Open in Browser**:
+    Go to [http://localhost:8080](http://localhost:8080) to start using the application.
 
 ## Notes
 

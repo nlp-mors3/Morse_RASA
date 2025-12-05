@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from nlp_lib.doc_reader import get_content_sections as gcs
+import requests
 
 app = Flask(
     __name__, 
@@ -113,6 +114,8 @@ def proxy():
     try:
         if request.method == "GET":
             gas_response = requests.get(GAS_URL, params=request.args)
+            print(f"DEBUG: GAS Response Status: {gas_response.status_code}")
+            print(f"DEBUG: GAS Response Body: {gas_response.text}")
             return (gas_response.text, gas_response.status_code, response_headers)
 
         elif request.method == "POST":
