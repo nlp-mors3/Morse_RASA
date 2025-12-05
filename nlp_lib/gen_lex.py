@@ -4,7 +4,7 @@ import os
 import google.generativeai as genai
 
 class IbaloiTranslator:
-    def __init__(self, csv_path='nlp_lib/FINAL-Ibaloi_LexiconWordCollection - Main Lexicon.csv', api_key=None):
+    def __init__(self, csv_path='nlp_lib/FINAL-Ibaloi_LexiconWordCollection - Main Lexicon.csv', api_key="AIzaSyAwZZrURF4250GIRrraOwI41g2hHk4a56Q"):
         self.en_to_ib = {}
         self.ib_to_en = {}
         
@@ -79,26 +79,14 @@ class IbaloiTranslator:
             return 'en2ib'
         return 'ib2en'
 
-    def tokenize(self, text):
-        """
-        Splits text into words and punctuation marks.
-        Example: "Mapteng, a agsapa!" -> ['Mapteng', ',', ' ', 'a', ' ', 'agsapa', '!']
-        """
-        # This regex matches:
-        # 1. Words (including those with hyphens like 'a-anak'): [\w-]+
-        # 2. Non-whitespace characters (punctuation): [^\w\s]
-        # 3. Whitespace (to preserve formatting): \s+
-        pattern = r"[\w'-]+|[^\w\s]|\s+"
-        return re.findall(pattern, text)
-
     def translate(self, text):
         """
         Translates text using Lexicon lookup + Gemini refinement.
+        Returns a dictionary compatible with the Flask app.
         """
         if not text:
             return {"error": "No text provided", "success": False}
 
-        # 1. Detect direction using the raw text
         direction = self.detect_direction(text)
         
         # Configure based on direction
@@ -111,35 +99,28 @@ class IbaloiTranslator:
             lexicon = self.ib_to_en
             source_lang, target_lang = "Ibaloi", "English"
 
-        # 2. Tokenize (Better than split())
-        tokens = self.tokenize(text)
-        
+        # Step 1: Tokenize & Lookup
+        raw_tokens = text.split()
         translated_tokens = []
         breakdown_data = []
         found_context_strings = []
         has_missing_words = False
 
-        for token in tokens:
-            # Check if the token is whitespace or punctuation (skip lookup, just append)
-            if not token.strip() or not re.match(r"[\w'-]+", token):
-                translated_tokens.append(token)
+        for token in raw_tokens:
+            clean = self.clean_token(token)
+            
+            # Skip empty or stopwords for lookup, but keep in structure if needed
+            if not clean or clean in stopwords:
+                # Just append original for flow, but mark as skipped in breakdown if desired
+                translated_tokens.append(token) 
                 continue
 
-            # LOWERCASE CONVERSION HERE for lookup accuracy
-            clean_lookup_key = token.lower()
-
-            # Skip stopwords
-            if clean_lookup_key in stopwords:
-                translated_tokens.append(token) # Keep original case for stopwords
-                continue
-
-            # 3. Dictionary Lookup
-            if clean_lookup_key in lexicon:
-                entry = lexicon[clean_lookup_key]
+            if clean in lexicon:
+                entry = lexicon[clean]
                 target_word = entry['target']
                 translated_tokens.append(target_word)
                 
-                # Add to breakdown list
+                # Add to breakdown list for frontend
                 breakdown_item = {
                     "word": token,
                     "meaning": target_word,
@@ -153,20 +134,20 @@ class IbaloiTranslator:
                 if 'POS' in entry: details.append(f"POS: {entry['POS']}")
                 if 'Ibaloi_Example' in entry: details.append(f"Ex(IB): {entry['Ibaloi_Example']}")
                 if 'English_Example' in entry: details.append(f"Ex(EN): {entry['English_Example']}")
+                if 'Notes' in entry: details.append(f"Notes: {entry['Notes']}")
+
                 
-                found_context_strings.append(f"- Input '{clean_lookup_key}': {'; '.join(details)}")
+                found_context_strings.append(f"- Input '{clean}': {'; '.join(details)}")
             else:
-                # Word not found
-                translated_tokens.append(f"[{token}]") # Keep original case
+                translated_tokens.append(f"[{clean}]")
                 breakdown_data.append({"word": token, "meaning": "???"})
                 has_missing_words = True
 
-        # Join tokens back together (since we kept whitespace tokens, simple join works)
-        rough_translation = "".join(translated_tokens)
+        rough_translation = " ".join(translated_tokens)
         context_block = "\n".join(found_context_strings)
 
-        # Step 4: Refine with Gemini
-        final_translation = rough_translation 
+        # Step 2: Refine with Gemini
+        final_translation = rough_translation # Default to rough if LLM fails/missing
         
         if self.model:
             final_translation = self.refine_with_gemini(
