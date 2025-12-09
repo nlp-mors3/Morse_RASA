@@ -1,4 +1,4 @@
-# ibaloiNLP : Preserving Ibaloi through Neural Processing - A Hub for Research-Paper | LexiconLM Translator | Lexicon Table
+# ibaloiNLP : Preserving Ibaloi through Neural Processing
 
 ---
 
