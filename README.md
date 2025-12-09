@@ -90,23 +90,22 @@ pip install -r requirements.txt
 
    ```
       project-root/
-   ├── app.py
-   ├── assets/
-   ├── control/
-   ├── nlp_lib/
-   ├── pages/
-   ├── static/
-   ├── templates/
-   ├── venv/
-   │   └── ... (virtual environment files)
-   ├── .env (contains your gemini credentials)
-   ├── package.json
-   ├── package-lock.json
-   ├── proxy.js
-   └── requirements.txt
+      ├── app.py
+      ├── assets/
+      ├── control/
+      ├── nlp_lib/
+      ├── pages/
+      ├── static/
+      ├── templates/
+      ├── venv/
+      │   └── ... (virtual environment files)
+      ├── .env (contains your gemini credentials)
+      ├── package.json
+      ├── package-lock.json
+      ├── proxy.js
+      └── requirements.txt
 
    ```
-
 
 
 ---
