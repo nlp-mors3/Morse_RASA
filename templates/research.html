@@ -4,43 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ibaloi NLP | Digital Lexicon & Research</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='research_page.css')}}">
     <script src="{{ url_for('static', filename='research_page.js')}}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        primary: '#4a3b76',
-                        secondary: '#6d5b9a',
-                        accent: '#a991f0',
-                        dark: '#1a1a2e',
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary selection:text-white">
-
-    <div id="navbar"></div>
+    <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300 max" id="navbar"></nav>
 
     <!-- 1. Left Sidebar (Table of Contents) - COLLAPSIBLE WIDTH -->
-    <!-- Changed top-0 to top-16 to start below the navbar -->
     <aside id="toc-sidebar" class="fixed top-16 left-0 bg-white shadow-lg border-r border-gray-200 z-30 flex flex-col">
-        
         <!-- Header with Toggle Button -->
         <div class="p-4 border-b flex justify-between items-center h-16">
             <!-- Text label to hide when collapsed -->
             <h1 id="outline-title" class="text-xl font-bold text-gray-800 hidden-on-collapse whitespace-nowrap overflow-hidden">Document Outline</h1>
-            
             <!-- Collapse Button (always visible) -->
             <button id="collapse-toggle" class="p-1 rounded-full text-gray-500 hover:bg-gray-100 transition duration-150" aria-expanded="true" aria-controls="toc-nav">
                 <!-- Left arrow SVG (use rotate for the transition) -->
@@ -49,7 +28,6 @@
         </div>
 
         <!-- TOC Links Container - Collapsible Area -->
-        <!-- Removed inline max-height since it's now handled by the JS scrollHeight calculation and CSS transitions -->
         <nav id="toc-nav" class="flex-grow overflow-y-auto p-4 space-y-1 transition-all duration-300 ease-in-out">
             <!-- Dynamic links will be inserted here by JavaScript -->
         </nav>
@@ -57,97 +35,10 @@
 
     <!-- 2. Main Content Area - Margin changes based on sidebar width -->
     <div id="content-wrapper" class="w-full p-4 sm:p-8">
-
         <main id="document-content" class="max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-xl shadow-2xl">
-            
-            <header class="mb-10 pb-4 border-b border-gray-200">
-                <h1 class="text-4xl font-extrabold text-gray-900 mb-2">The Comprehensive Guide to Website Sidebars</h1>
-                <p class="text-gray-500 italic">Exploring the utility and implementation of navigation panels.</p>
-            </header>
-
-            <section class="space-y-6">
-
-                <h2 id="section-1" class="text-3xl font-semibold pt-8 pb-2 border-b text-gray-800">1. Introduction to Navigation Design</h2>
-                <p>Navigation is the heartbeat of a good website. Without a clear path, users quickly become lost and frustrated. A sidebar, or a dynamic table of contents, serves as an essential internal compass for long-form content, guiding the reader through complex topics with ease. This design pattern has been proven effective by major documentation platforms and reading tools.</p>
-                <p>The primary goal is to ensure accessibility and rapid context switching, allowing users to jump between sections instantly without endless scrolling.</p>
-
-                <h3 id="subsection-1-1" class="text-xl font-medium pt-4 text-gray-700">1.1. User Expectations and Benefits</h3>
-                <p>Modern users expect documentation and long articles to be navigable. A lack of an outline signals a poorly structured document. Key benefits include enhanced user experience, better scannability, and reduced cognitive load.</p>
-
-                <h3 id="subsection-1-2" class="text-xl font-medium pt-4 text-gray-700">1.2. Deciding Between Fixed and Scrolling Panels</h3>
-                <p>A fixed sidebar, like the one implemented here, ensures the table of contents is always available, regardless of scroll position. This is ideal for very long documents where the user might forget the overall structure.</p>
-                
-                <h2 id="section-2" class="text-3xl font-semibold pt-8 pb-2 border-b text-gray-800">2. Implementation Strategy with Modern Tools</h2>
-                <p>We chose Tailwind CSS for rapid styling and Vanilla JavaScript for the dynamic logic. The key technical challenge is linking the scroll position to the sidebar's active state, which we solve using the `IntersectionObserver` API.</p>
-
-                <h3 id="subsection-2-1" class="text-xl font-medium pt-4 text-gray-700">2.1. Generating the Outline Dynamically</h3>
-                <p>Instead of hard-coding the links, we use JavaScript to query all `h2` and `h3` elements in the document. We assign a unique ID to each header (if it doesn't already have one) and use that ID to create the jump links (`#id`).</p>
-                
-                <h3 id="subsection-2-2" class="text-xl font-medium pt-4 text-gray-700">2.2. Tracking Scroll Position with IntersectionObserver</h3>
-                <p>The `IntersectionObserver` is crucial. It efficiently watches when each header element enters or leaves the viewport. When a header is observed to be "at the top" (or intersecting the top threshold), we mark its corresponding link in the sidebar as `active`.</p>
-
-                <h2 id="section-3" class="text-3xl font-semibold pt-8 pb-2 border-b text-gray-800">3. Responsive Design Considerations</h2>
-                <p>A fixed, permanent sidebar works well on desktop screens. Now, it is also permanently visible on mobile devices, which changes the layout dramatically on small screens.</p>
-
-                <h3 id="subsection-3-1" class="text-xl font-medium pt-4 text-gray-700">3.1. Permanent Sidebar Layout</h3>
-                <p>Since the sidebar is always visible, the main content is now permanently offset to the right by 64 units (`16rem`). This ensures no content is ever obscured by the fixed panel.</p>
-
-                <h3 id="subsection-3-2" class="text-xl font-medium pt-4 text-gray-700">3.2. User Experience Adjustment</h3>
-                <p>On small devices, the screen real estate is significantly reduced, with only the area to the right of the 64-unit wide sidebar available for reading. This is a common design choice for web apps where the outline/navigation is considered paramount.</p>
-                
-                <h2 id="section-4" class="text-3xl font-semibold pt-8 pb-2 border-b text-gray-800">4. Conclusion and Next Steps</h2>
-                <p>Implementing a dynamic TOC significantly enhances the usability of any document-heavy web application. The combination of a structured outline and visual feedback on the user's current position creates a superior reading experience.</p>
-                <p>Possible next steps for this implementation would include adding support for `h1` tags (if the document has multiple) or creating a custom scrollbar for the TOC itself.</p>
-
-                <div class="h-64"></div>
-                <p class="text-center text-gray-400">--- End of Document ---</p>
-                <div class="h-96"></div> <!-- Extra space for scrolling past the last section -->
-
-            </section>
+            <!-- Dynamic Content Generation-->
         </main>
     </div>
-
-    <footer class="bg-slate-900 text-slate-300 py-12 mt-12" id="about">
-        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-8 items-center">
-            <div>
-                <h4 class="text-white text-lg font-bold mb-2">About the Project</h4>
-                <p class="text-sm text-slate-400 max-w-md">
-                    This project is a requirement for CSE 30 NLP Course. We aim to use technology to bridge the gap between traditional dialects and modern NLP solutions.
-                </p>
-            </div>
-            <div class="flex gap-4 justify-start md:justify-end">
-                <a href="#" class="hover:text-white transition-colors">Contact</a>
-                <a href="#" class="hover:text-white transition-colors">Documentation</a>
-                <a href="#" class="hover:text-white transition-colors">GitHub</a>
-            </div>
-        </div>
-        <div class="container mx-auto px-6 mt-8 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
-            &copy; 2025 NLP Team Mors3. All rights reserved.
-        </div>
-    </footer>
-
-    <script>
-        // Initialize Icons
-        feather.replace();
-
-        // Navbar Scroll Effect
-        const nav = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 20) {
-                nav.classList.add('shadow-md', 'bg-white/90', 'backdrop-blur-md');
-                nav.classList.remove('bg-transparent');
-            } else {
-                nav.classList.remove('shadow-md', 'bg-white/90', 'backdrop-blur-md');
-                nav.classList.add('bg-transparent');
-            }
-        });
-
-        // Mobile Menu Toggle
-        const btn = document.getElementById('mobile-menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        btn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
-        });
-    </script>
+    <footer class="bg-slate-900 text-slate-300 py-12 mt-12" id="footer"></footer>
 </body>
 </html>

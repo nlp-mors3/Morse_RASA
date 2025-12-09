@@ -8,6 +8,22 @@ fetch("/navbar")
         highlightCurrentPage();
     });
 
+fetch("/footer")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("footer").innerHTML = html;
+        if (window.feather) {
+            feather.replace();
+        }
+
+        //Different Copyright Content for LLM Translator
+        if(window.location.pathname === "/rasa-translator") {
+            document.getElementById("copyright").innerHTML = "&copy; 2025 NLP Team Mors3. Powered by Gemini LLM + Lexicon."
+        } else {
+            document.getElementById("copyright").innerHTML = "&copy; 2025 NLP Team Mors3. All rights reserved."
+        }
+    });
+
 document.addEventListener("DOMContentLoaded", () => {
     feather.replace();
 });
@@ -30,10 +46,11 @@ function highlightCurrentPage() {
     const path = window.location.pathname;
 
     const navLinks = {
-        "/lexicon": "Lexicon",
-        "/maintenance": "Research Paper",
+        "/lexicon-browse": "Lexicon",
+        "/research-paper": "Research Paper",
         "/builder": "Sentence Builder",
-        "/translator": "Translator"
+        "/rasa-translator": "LLM Translator",
+        "../#about": "About Us"
     };
 
     // Identify the active label based on current path

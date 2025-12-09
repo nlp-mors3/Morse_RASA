@@ -179,14 +179,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Initialization ---
-    populateDocument();
-    generateTOC();
-    observeHeaders();
+    function init() {
+        populateDocument();
+        generateTOC();
+        observeHeaders();
 
-    // Set the initial active link for the first section
-    const firstLink = document.querySelector('.toc-link');
-    if (firstLink) {
-        firstLink.classList.add('active');
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#4a3b76',
+                        secondary: '#6d5b9a',
+                        accent: '#a991f0',
+                        dark: '#1a1a2e',
+                    }
+                }
+            }
+        }
+        
+        // Set the initial active link for the first section
+        const firstLink = document.querySelector('.toc-link');
+        if (firstLink) {
+            firstLink.classList.add('active');
+        }
+
+        // Initialize Icons
+        feather.replace();
+
+        // Navbar Scroll Effect
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+                nav.classList.remove('bg-transparent');
+            } else {
+                nav.classList.remove('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+                nav.classList.add('bg-transparent');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
     }
+    
+    init();
 });

@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="/static/script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script>
         tailwind.config = {
             theme: {
@@ -70,14 +71,12 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary selection:text-white pb-20">
-
-    <div id="navbar"></div>
-
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary selection:text-white">
+    <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300 max" id="navbar"></nav>
     <main class="container mx-auto px-4 pt-18 max-w-5xl">
         
         <!-- Header -->
-        <div class="text-center mb-10">
+        <div class="pt-20 text-center mb-10">
             <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
                 Hybrid Neural Translation
             </h1>
@@ -182,10 +181,7 @@
 
         </div>
     </main>
-
-    <footer class="text-center py-8 text-xs text-slate-400">
-        &copy; 2025 NLP Team Mors3. Powered by Gemini LLM + Lexicon.
-    </footer>
+    <footer class="bg-slate-900 text-slate-300 py-12 mt-12" id="footer"></footer>
 
     <script>
         // --- CONFIGURATION ---

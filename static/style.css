@@ -1,13 +1,16 @@
       /* Glass Navbar Base State */
 .glass-nav {
+    position: sticky;
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
+
 body {
     font-family: 'Inter', sans-serif;
 }
+
 /* Custom Scrollbar for Textareas */
 textarea::-webkit-scrollbar {
     width: 8px;
