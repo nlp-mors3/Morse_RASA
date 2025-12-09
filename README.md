@@ -52,7 +52,7 @@ cd morse_rasa (https://github.com/PerhapsYou/Morse_RASA.git)
 MACOS
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
 ```
 WINDOWS
 ```bash
