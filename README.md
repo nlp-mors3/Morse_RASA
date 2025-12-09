@@ -122,4 +122,4 @@ Open your browser and navigate to `http://localhost:5000` to access the chatbot 
 
 ## Preview
 
-![Web-agent IMG Preview](Preview.png)
+![Web-agent IMG Preview](image.png)
