@@ -4,7 +4,7 @@ import os
 import google.generativeai as genai
 
 class IbaloiTranslator:
-    def __init__(self, csv_path='nlp_lib/FINAL-Ibaloi_LexiconWordCollection - Main Lexicon.csv', api_key="AIzaSyAwZZrURF4250GIRrraOwI41g2hHk4a56Q"):
+    def __init__(self, csv_path='nlp_lib/FINAL-Ibaloi_LexiconWordCollection - Main Lexicon.csv', api_key=None):
         self.en_to_ib = {}
         self.ib_to_en = {}
         
@@ -166,18 +166,42 @@ class IbaloiTranslator:
 
     def refine_with_gemini(self, rough_text, original_input, source_lang, target_lang, has_missing_words, context_block):
         try:
+            
             base_prompt = f"""
-            I am translating from {source_lang} to {target_lang}.
+                You are an expert linguist and translator specializing in the Ibaloi language (Northern Philippines) and English. 
+                Your task is to translate the user's input from {source_lang} to {target_lang}.
 
-            Original Input: "{original_input}"
-            Rough Word-for-Word Lookups: "{rough_text}"
+                ### INPUT DATA
+                1.  Original Input ({source_lang}): {original_input}
 
-            === DETAILED CONTEXT FROM LEXICON ===
-            Use this data to choose the correct grammatical form or understand the meaning:
-            {context_block}
-            =====================================
+                2.  Lexicon Lookup (Rough Draft): {rough_text}
+
+                3.  Lexicon Context & Metadata:
+                {context_block}
+
+                ### LINGUISTIC GUIDELINES (Strict Adherence)
+                
+                1.  SYNTAX & GRAMMAR:
+                Structure: English follows SVO (Subject-Verb-Object). Ibaloi typically follows VSO (Verb-Subject-Object) or VOS. Adjust the sentence structure accordingly.
+                Focus System: Pay attention to Ibaloi verbal affixes. 
+                    *Actor Focus: man-, um-, maka-
+                    *Object Focus: -en, i-, -an
+                    *Past Tense: usually involves an infix like '-in-' (e.g., 'kinan' from 'kan') or prefix 'nan-'.
+                Pronouns: Use correct case (e.g., 'sih'kak' for I, 'mo' for you [genitive], 'ka' for you [nominative]).
+
+                2.  ORTHOGRAPHY & SPELLING:
+                *'SH' Sound:** Use 'sh' for the soft palatal sound common in Ibaloi (e.g., shiman (there), shiyay (here), shobda (smoke)). Do not anglicize this to 'ch' or 's'.
+                *'J' Sound:** Use 'j' for the affricate sound (e.g., jagjag, jet).
+                Glottal Stops: Preserve glottal stops if implied (e.g., ngah'ngah).
+                
+                3.  TONE & STYLE:
+                •  Maintain the paragraph structure (newlines) of the original input.
+                •  The translation should be natural and conversational, not a robotic word-for-word translation.
+                If specific cultural terms (like *Cañao/Kanyaw or specific rituals) appear, preserve the Ibaloi term if there is no direct English equivalent.
+
+                ### INSTRUCTIONS
             """
-
+            
             if has_missing_words:
                 prompt = base_prompt + f"""
 
