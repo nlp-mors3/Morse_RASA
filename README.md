@@ -36,7 +36,7 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://gitlab.com/2195465/ai-model.git
+git clone https://github.com/PerhapsYou/Morse_RASA.git
 cd morse_rasa (https://github.com/PerhapsYou/Morse_RASA.git)
 ```
 
