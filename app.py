@@ -81,6 +81,10 @@ def maintenance():
 def navbar():
     return render_template("navbar.html")
 
+@app.route("/footer")
+def footer():
+    return render_template("footer.html")
+
 @app.route("/lexicon")
 def lexicon():
     data = []
