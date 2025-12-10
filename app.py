@@ -43,6 +43,10 @@ def lexiconBrowse():
 def builder():
     return render_template("builder.html")
 
+@app.route("/footer")
+def footer():
+    return render_template("footer.html")
+
 
 # =============================
 # ADMIN PAGE ROUTES

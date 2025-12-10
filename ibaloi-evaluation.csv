@@ -1,0 +1,101 @@
+id,source_text,target_text,category
+1,Mapteng ja agsapa.,Good morning.,Greetings
+2,Mapteng ja akew.,Good day.,Greetings
+3,Mapteng ja mamashem.,Good afternoon.,Greetings
+4,Mapteng ja edavi.,Good evening.,Greetings
+5,Mapteng ja rabii.,Good night.,Greetings
+6,Kabol ka.,Welcome.,Greetings
+7,Kamusta kayo?,How are you (plural)?,Greetings
+8,Kamusta ka?,How are you (singular)?,Greetings
+9,Mapteng met.,I am fine.,Greetings
+10,Salamat.,Thank you.,Greetings
+11,Ayshi kwan to.,You are welcome.,Greetings
+12,Pangaasim.,Please.,Greetings
+13,Pakawanen moak.,Forgive me.,Greetings
+14,Pan-annad ka.,Take care.,Greetings
+15,On.,Yes.,Common Responses
+16,Enshi.,None.,Common Responses
+17,Ag.,No.,Common Responses
+18,Angkan.,Never mind.,Common Responses
+19,Agpayso?,Really?,Common Responses
+20,Agpayso.,It is true.,Common Responses
+21,Sipa ngaran mo?,What is your name?,Introduction
+22,Si [Name] ak.,I am [Name].,Introduction
+23,Tuway edapo-an mo?,Where do you come from?,Introduction
+24,Tuway daguan mo?,Where are you going?,Introduction
+25,Emuan ak shi [Place].,I am going to [Place].,Introduction
+26,Piga tawen mo la?,How old are you?,Introduction
+27,Sipa sikatoy?,Who is he?,Introduction
+28,A-amtaem sikatoy?,Do you know him?,Introduction
+29,Ka-iit taka.,You are my friend.,Introduction
+30,Wara asawa mo?,Are you married?,Introduction
+31,Wara anak mo?,Do you have children?,Introduction
+32,Ngantoy ubra mo?,What is your work?,Introduction
+33,Ebadeg ja baley.,Big house.,Description
+34,Entikey ja too.,Short person.,Description
+35,Ekayang ja too.,Tall person.,Description
+36,Na-ulaw ak.,I am dizzy.,Physical State
+37,Na-kigtot ak.,I was startled.,Physical State
+38,Na-agan ak.,I am hungry.,Physical State
+39,Mangan tajo la.,Let us eat.,Daily Activity
+40,Naka-inum ak.,I am thirsty.,Physical State
+41,Inom ni chanum.,Drink water.,Daily Activity
+42,Masakit ulo ko.,My head aches.,Physical State
+43,Anay!,Ouch!,Physical State
+44,Epetang.,It is hot.,Weather
+45,E-kakdeng.,It is cold.,Weather
+46,Emansileng.,It is shining.,Weather
+47,Eman-uran.,It is raining.,Weather
+48,Kala.,Come.,Imperative
+49,Asop ka.,Come closer.,Imperative
+50,Daw mo.,Go away.,Imperative
+51,Tungaw ka.,Sit down.,Imperative
+52,Ale-kay.,Stand up.,Imperative
+53,Ekad ka.,Walk.,Imperative
+54,Batik ka.,Run.,Imperative
+55,Umanan ta.,Let us wait.,Imperative
+56,Iduan mo.,Give it.,Imperative
+57,Ala-em.,Get it.,Imperative
+58,Ibagam.,Tell it.,Imperative
+59,Itaneng mo.,Listen.,Imperative
+60,Un-an mo.,Look at it.,Imperative
+61,Amtak.,I know.,Knowledge
+62,Ag ko amta.,I do not know.,Knowledge
+63,Piyan ko.,I like it.,Preferences
+64,Ag ko piyan.,I do not like it.,Preferences
+65,Nganto 'ya?,What is this?,Questions
+66,Nganto 'tan?,What is that?,Questions
+67,Piga?,How much?,Questions
+68,Nangina.,Expensive.,Description
+69,Nalaka.,Cheap.,Description
+70,Shakel too.,Many people.,Description
+71,Piyan taka.,I like you.,Emotions
+72,Ensemek taka.,I love you.,Emotions
+73,Na-burburaw ak.,I am angry.,Emotions
+74,Na-ragsak ak.,I am happy.,Emotions
+75,Embidin ak.,I am sad.,Emotions
+76,Na-bannog ak.,I am tired.,Emotions
+77,Ma-ukip ak la.,I am sleepy.,Emotions
+78,Mandiko ak.,I will take a bath.,Daily Activity
+79,Man-ames ak.,I will wash my face.,Daily Activity
+80,Esem taka.,I miss you.,Emotions
+81,Niman.,Now.,Time
+82,Agsapa.,Tomorrow.,Time
+83,Enkalman.,Yesterday.,Time
+84,Sakkey,One,Numbers
+85,Duwa,Two,Numbers
+86,Tedo,Three,Numbers
+87,Epat,Four,Numbers
+88,Dima,Five,Numbers
+89,Ennem,Six,Numbers
+90,Pito,Seven,Numbers
+91,Walo,Eight,Numbers
+92,Siyam,Nine,Numbers
+93,Simpo,Ten,Numbers
+94,Simpo tan sakkey,Eleven,Numbers
+95,Nganto ula 'tan?,What is that thing?,Questions
+96,I-aboloy mo.,Allow it.,Imperative
+97,Siged.,Good.,Common Responses
+98,Nganto pengikowan mo shi Ibaloi ni...?,How do you say ... in Ibaloi?,Questions
+99,Diyos man-adibay son sikayo.,God bless you all.,Greetings
+100,Mapteng ja be-tew.,Happy Birthday.,Greetings
