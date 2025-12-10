@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -27,36 +28,7 @@
     </script>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary selection:text-white">
-
-    <nav class="fixed w-full z-50 glass-nav transition-all duration-300 max" id="navbar">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-primary flex items-center gap-2">
-                <i data-feather="book-open" class="w-6 h-6"></i>
-                <span>Ibaloi<span class="font-light text-slate-500">NLP</span></span>
-            </a>
-            
-            <div class="hidden md:flex items-center gap-8 font-medium text-sm">
-                <a href="/lexicon-browse" class="hover:text-primary transition-colors">Lexicon</a>
-                <a href="#research" class="hover:text-primary transition-colors">Research Paper</a>
-                <a href="/builder" class="hover:text-primary transition-colors">Sentence Builder</a>
-                <a href="/rasa-translator" class="hover:text-primary transition-colors">RASA Translator</a>
-                <a href="#about" class="px-5 py-2.5 bg-primary text-white rounded-full hover:bg-secondary transition-colors shadow-lg shadow-primary/30">About Us</a>
-            </div>
-
-            <button class="md:hidden text-slate-700" id="mobile-menu-btn">
-                <i data-feather="menu"></i>
-            </button>
-        </div>
-        
-        <div class="hidden md:hidden bg-white border-t p-4 flex flex-col gap-4 shadow-lg" id="mobile-menu">
-            <a href="/lexicon-browse">Lexicon</a>
-            <a href="#research">Research Paper</a>
-            <a href="/builder">Sentence Builder</a>
-            <a href="https://ibaloi-webapp.vercel.app/">RASA Translator</a>
-            <a href="#about">About Us</a>
-        </div>
-    </nav>
-
+    <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300 max" id="navbar"></nav>
     <header class="hero relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6">
         <div class="container mx-auto text-center relative z-10">
             <span class="inline-block py-1 px-3 rounded-full bg-white/10 border border-white/20 text-white text-xs font-semibold tracking-wider mb-6 fade-in">
@@ -67,7 +39,7 @@
                 Neural Processing.
             </h1>
             <p class="text-lg md:text-xl text-slate-200 max-w-2xl mx-auto mb-10 fade-in delay-200 font-light">
-                A digital lexicon and sentence construction system powered by RASA technology to enhance language accessibility and preservation.
+                A digital lexicon and sentence construction system powered by LLM technology to enhance language accessibility and preservation.
             </p>
 
             <div class="max-w-xl mx-auto bg-white p-2 rounded-full shadow-2xl flex items-center gap-2 fade-in delay-300 transform transition-transform hover:scale-[1.02]">
@@ -84,18 +56,22 @@
     <section id="table"></section>
     <main class="container mx-auto px-6 py-16 -mt-10 relative z-20">
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-20">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center hover:shadow-md transition-all">
-                <h3 class="text-3xl font-bold text-primary mb-1">2,500+</h3>
+                <h3 class="text-3xl font-bold text-primary mb-1">1,500+</h3>
                 <p class="text-sm text-slate-500 uppercase tracking-wide">Lexicon Entries</p>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center hover:shadow-md transition-all">
-                <h3 class="text-3xl font-bold text-primary mb-1">94.2%</h3>
-                <p class="text-sm text-slate-500 uppercase tracking-wide">RASA Accuracy</p>
+                <h3 class="text-3xl font-bold text-primary mb-1">00.0% Gemini 2.5</h3>
+                <p class="text-sm text-slate-500 uppercase tracking-wide">Translator Accuracy</p>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center hover:shadow-md transition-all">
-                <h3 class="text-3xl font-bold text-primary mb-1">DIET</h3>
-                <p class="text-sm text-slate-500 uppercase tracking-wide">Classifier Architecture</p>
+                <h3 class="text-3xl font-bold text-primary mb-1">00.0% BLEU</h3>
+                <p class="text-sm text-slate-500 uppercase tracking-wide">Lexicon Accuracy</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center hover:shadow-md transition-all">
+                <h3 class="text-3xl font-bold text-primary mb-1">MoE</h3>
+                <p class="text-sm text-slate-500 uppercase tracking-wide">LLM Architecture</p>
             </div>
         </div>
         
@@ -104,7 +80,7 @@
                 <div class="w-full md:w-1/2">
                     <h2 class="text-3xl font-bold text-slate-800 mb-6">Bridging Tradition with Technology</h2>
                     <p class="text-slate-600 mb-6 leading-relaxed">
-                        Our research focuses on the development of a low-resource language model for Ibaloi. Utilizing the <strong>RASA Open Source framework</strong>, we have developed a specialized intent classification and entity extraction pipeline.
+                        Our research focuses on the development of a low-resource language model for Ibaloi. Utilizing the <strong>Gemini 2.5 Open Source framework</strong>, we have developed a generative approach translation and lexicon extraction pipeline.
                     </p>
                     <ul class="space-y-4 mb-8">
                         <li class="flex items-start gap-3">
@@ -168,7 +144,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-slate-800 mb-3">Sentence Builder</h3>
                     <p class="text-slate-500 text-sm leading-relaxed mb-6">
-                        Contribute to a great cause, join the crowdsourcing movement!
+                        Construct ibaloi sentences for preserving indigeneous language, join the crowdsourcing movement!
                     </p>
                     <span class="text-sm font-semibold text-blue-600 group-hover:translate-x-1 transition-transform inline-block">Start Building &rarr;</span>
                 </a>
@@ -177,9 +153,9 @@
                     <div class="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                         <i data-feather="message-square"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-3">RASA Translator</h3>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">LexiconLM Translator</h3>
                     <p class="text-slate-500 text-sm leading-relaxed mb-6">
-                        Test our ML model. Input English phrases and see how the RASA pipeline interprets and translates them.
+                        Test our translation model. Input English phrases and see how the Lexicon+LLM pipeline interprets and translates them.
                     </p>
                     <span class="text-sm font-semibold text-indigo-600 group-hover:translate-x-1 transition-transform inline-block">Launch Translator &rarr;</span>
                 </a>
@@ -187,26 +163,7 @@
         </section>
 
     </main>
-
-    <footer class="bg-slate-900 text-slate-300 py-12 mt-12" id="about">
-        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-8 items-center">
-            <div>
-                <h4 class="text-white text-lg font-bold mb-2">About the Project</h4>
-                <p class="text-sm text-slate-400 max-w-md">
-                    This project is a requirement for CSE 30 NLP Course. We aim to use technology to bridge the gap between traditional dialects and modern NLP solutions.
-                </p>
-            </div>
-            <div class="flex gap-4 justify-start md:justify-end">
-                <a href="#" class="hover:text-white transition-colors">Contact</a>
-                <a href="#" class="hover:text-white transition-colors">Documentation</a>
-                <a href="#" class="hover:text-white transition-colors">GitHub</a>
-            </div>
-        </div>
-        <div class="container mx-auto px-6 mt-8 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
-            &copy; 2025 NLP Team Mors3. All rights reserved.
-        </div>
-    </footer>
-    
+    <footer class="bg-slate-900 text-slate-300 py-12 mt-12" id="footer"></footer>
     <script>
         // Initialize Icons
         feather.replace();

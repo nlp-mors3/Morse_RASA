@@ -49,8 +49,7 @@ body {
     overflow: hidden;
 }
 
-/* Utility class to rotate the arrow icon */
-/* Rotated state now means it points right (to expand) */
+/* Arrow Icon*/
 #collapse-icon.rotated {
     transform: rotate(-180deg);
 }

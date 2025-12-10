@@ -7,16 +7,17 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <script src="/static/builder/script.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <script src="/static/script.js"></script>
   </head>
 
   <body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary selection:text-white">
-    <div id="navbar"></div>
+    <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300 max" id="navbar"></nav>
 
     <!-- Main Wrapper -->
-    <main class="container mx-auto px-4 pt-32 pb-12 flex justify-center">
+    <main class="container mx-auto px-4 pt-20 pb-12 flex justify-center">
 
       <!-- Single Centered Card -->
       <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-8 max-w-3xl w-full">
@@ -47,9 +48,7 @@
         <div id="status" class="mt-4 text-blue-700 text-sm"></div>
 
       </div>
-
     </main>
-
-    <script src="/static/builder/script.js"></script>
+    <footer class="bg-slate-900 text-slate-300 py-12 mt-12" id="footer"></footer>
   </body>
 </html>
