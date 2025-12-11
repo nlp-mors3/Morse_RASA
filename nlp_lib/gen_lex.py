@@ -18,7 +18,7 @@ class IbaloiTranslator:
         self.api_key = api_key or os.environ.get("GEMINI_API_KEY")
         if self.api_key:
             genai.configure(api_key=self.api_key)
-            self.model = genai.GenerativeModel('gemini-2.5-flash-preview-09-2025')
+            self.model = genai.GenerativeModel('gemini-2.0-flash-lite')
         else:
             print("Warning: No GEMINI_API_KEY provided. AI refinement will be disabled.")
             self.model = None

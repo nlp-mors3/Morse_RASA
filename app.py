@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, jsonify
-from nlp_lib.doc_reader import get_content_sections as gcs
+from flask import Flask, render_template, request, jsonify, send_from_directory
+from nlp_lib.doc_reader import cleanup_extracted_images as img_cleaner, get_content_sections as gcs
+import os
 import requests
 from nlp_lib.gen_lex import IbaloiTranslator
 
@@ -21,30 +22,47 @@ translator_service = IbaloiTranslator()
 
 @app.route("/")
 def home():
+    img_cleaner(app.root_path)
     return render_template("index.html")
 
 @app.route("/aboutus")
 def about_us():
-    return render_template("aboutUs.html")
+    img_cleaner(app.root_path)
+    return render_template("AboutUs.html")
 
 @app.route("/rasa-translator")
 def rasa_translator():
+    img_cleaner(app.root_path)
     return render_template("translation.html")
 
 @app.route("/research-paper")
 def research_paper():
-    return render_template("research.html")
+    img_cleaner(app.root_path)
+    return render_template("document.html")
+
+@app.route("/documentation")
+def documentation():
+    img_cleaner(app.root_path)
+    return render_template("document.html")
+
+@app.route("/contactUs")
+def contact():
+    img_cleaner(app.root_path)
+    return render_template("contact.html")
 
 @app.route("/lexicon-browse")
 def lexiconBrowse():
+    img_cleaner(app.root_path)
     return render_template("lexicon browser.html")
 
 @app.route("/builder")
 def builder():
+    img_cleaner(app.root_path)
     return render_template("builder.html")
 
 @app.route("/footer")
 def footer():
+    img_cleaner(app.root_path)
     return render_template("footer.html")
 
 
@@ -54,6 +72,7 @@ def footer():
 
 @app.route("/dashboard")
 def dashboard():
+    img_cleaner(app.root_path)
     return render_template("dashboard.html")
 
 # =============================
@@ -62,14 +81,17 @@ def dashboard():
 
 @app.errorhandler(404)
 def page_not_found(error):
+    img_cleaner(app.root_path)
     return render_template("404.html"), 404
 
 @app.errorhandler(403)
 def forbidden(error):
+    img_cleaner(app.root_path)
     return render_template("403.html"), 403
 
 @app.errorhandler(500)
 def server_error(error):
+    img_cleaner(app.root_path)
     return render_template("500.html"), 500
 
 
@@ -79,16 +101,27 @@ def server_error(error):
 
 @app.route("/maintenance")
 def maintenance():
+    img_cleaner(app.root_path)
     return render_template("maintenance.html")
 
 @app.route("/navbar")
 def navbar():
+    img_cleaner(app.root_path)
     return render_template("navbar.html")
 
 @app.route("/lexicon")
 def lexicon():
     data = []
+    img_cleaner(app.root_path)
     return render_template("lexicon.html",data=data)
+
+# =============================
+#  FUNCTION ROUTES
+# =============================
+
+@app.route('/assets/extracted_images/<path:filename>')
+def serve_extracted_image(filename):
+    return send_from_directory(os.path.join(app.root_path, 'assets', 'extracted_images'), filename)
 
 @app.route("/read-doc-content", methods=["POST"])
 def get_sections():
