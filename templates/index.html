@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ibaloi NLP | Digital Lexicon & Research</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icons/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icons/favicon-16x16.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -165,63 +169,109 @@
     </main>
     <footer class="bg-slate-900 text-slate-300 py-12 mt-12" id="footer"></footer>
     <script>
-        // Initialize Icons
-        feather.replace();
+    // Initialize Icons
+    feather.replace();
 
-        // Navbar Scroll Effect
-        const nav = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) {
-        nav.classList.add('shadow-md', 'bg-white/90', 'backdrop-blur-md');
-        nav.classList.remove('bg-transparent');
+    // 1. SAFELY Handle Navbar Scroll Effect
+    const nav = document.getElementById('navbar');
+    // Define navLinks (It was missing in your original code)
+    const navLinks = document.querySelectorAll('.nav-link'); // Adjust selector as needed
 
-        // Make children dark
-        navLinks.forEach(el => {
-            el.classList.remove('text-white');
-            el.classList.add('text-slate-800');
-        });
-    } else {
-        nav.classList.remove('shadow-md', 'bg-white/90', 'backdrop-blur-md');
-        nav.classList.add('bg-transparent');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) {
+            nav.classList.add('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+            nav.classList.remove('bg-transparent');
+            
+            if(navLinks.length > 0) {
+                navLinks.forEach(el => {
+                    el.classList.remove('text-white');
+                    el.classList.add('text-slate-800');
+                });
+            }
+        } else {
+            nav.classList.remove('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+            nav.classList.add('bg-transparent');
 
-        // Make children white
-        navLinks.forEach(el => {
-            el.classList.remove('text-slate-800');
-            el.classList.add('text-white');
-        });
-    }
-});
+            if(navLinks.length > 0) {
+                navLinks.forEach(el => {
+                    el.classList.remove('text-slate-800');
+                    el.classList.add('text-white');
+                });
+            }
+        }
+    });
 
-        // Mobile Menu Toggle
-        const btn = document.getElementById('mobile-menu-btn');
-        const menu = document.getElementById('mobile-menu');
+    // 2. SAFELY Handle Mobile Menu (Check if it exists first)
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    if (btn && menu) {
         btn.addEventListener('click', () => {
             menu.classList.toggle('hidden');
         });
-        fetch("/lexicon")
-                .then(res => res.text())
-                .then(html => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    const tableBlock = doc.getElementById('main-container'); // or your #table-block
-                    //doc.getElementById('search-section').style.display = 'none';
-                    document.getElementById("table").appendChild(tableBlock);
+    }
 
-                    const s = document.createElement("script");
-                    s.src = "/static/lexicon/script.js";
-                    document.body.appendChild(s);
-                });
-        document.getElementById("table").style.display = 'none';
-        document.getElementById('search-btn').addEventListener('click', () =>{
-            document.getElementById('table').style.display = '';
-            document.getElementById('general-search').value =  document.getElementById('general-search2').value
-            location.href = '#table'
-        });
-        document.getElementById('general-search2').addEventListener('keypress', e =>{
-            if (e.key === 'Enter') 
-                document.getElementById('search-btn').click();
-        });
+    // 3. Fetch Logic
+    fetch("/lexicon")
+        .then(res => res.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Ensure the container exists in the fetched HTML
+            const tableBlock = doc.getElementById('main-container'); 
+            
+            if (tableBlock) {
+                document.getElementById("table").appendChild(tableBlock);
+                
+                // Load the script AFTER the HTML is appended
+                const s = document.createElement("script");
+                s.src = "{{ url_for('static', filename='lexicon/script.js') }}";
+                document.body.appendChild(s);
+            } else {
+                console.error("Could not find #main-container in fetched content");
+            }
+        })
+        .catch(err => console.error("Error loading lexicon:", err));
 
-    </script>
+    // Hide table initially
+    document.getElementById("table").style.display = 'none';
+
+    // 4. FIXED Search Logic
+    const searchButton = document.getElementById('search-btn');
+    const heroInput = document.getElementById('general-search2');
+
+    searchButton.addEventListener('click', () => {
+        const tableSection = document.getElementById('table');
+        const targetInput = document.getElementById('general-search'); // The input inside the fetched table
+
+        // Reveal the table
+        tableSection.style.display = 'block';
+
+        if (targetInput) {
+            // Transfer the value
+            targetInput.value = heroInput.value;
+
+            // MANUALLY dispatch the event so the table script detects the change
+            const event = new Event('input', { bubbles: true });
+            targetInput.dispatchEvent(event);
+            
+            // Also trigger keyup in case the script listens for that
+            const keyUpEvent = new KeyboardEvent('keyup', {'key': 'Enter'});
+            targetInput.dispatchEvent(keyUpEvent);
+        } else {
+            console.warn("Table search input not loaded yet.");
+        }
+
+        // Scroll to table
+        location.href = '#table';
+    });
+
+    // Enter key support
+    heroInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') {
+            searchButton.click();
+        }
+    });
+</script>
 </body>
 </html>

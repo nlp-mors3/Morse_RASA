@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ibaloi NLP | Contact Us</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icons/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icons/favicon-16x16.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#4a3b76',
+                        secondary: '#6d5b9a',
+                        accent: '#a991f0',
+                        dark: '#1a1a2e',
+                        linkedin: '#0077b5',
+                        gmail: '#EA4335',
+                        phone: '#34A853'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .hero-bg {
+            background-color: #4a3b76;
+            background-image: radial-gradient(circle at 20% 150%, #6d5b9a 0%, #4a3b76 50%, #1a1a2e 100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary selection:text-white">
+
+    <div id="navbar"></div>
+
+    <header class="hero-bg relative pt-20 pb-20 px-6">
+        <div class="container mx-auto text-center relative z-10">
+            <span class="inline-block py-1 px-3 rounded-full bg-white/10 border border-white/20 text-white text-xs font-semibold tracking-wider mb-6">
+                GET IN TOUCH
+            </span>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                Contact the <span class="text-accent">Team</span>
+            </h1>
+            <p class="text-lg text-slate-200 max-w-2xl mx-auto font-light">
+                Have questions about our dataset, the Ibaloi translator, or collaboration opportunities?
+            </p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 -mt-16 relative z-20">
+        
+        <div class="max-w-4xl mx-auto space-y-8">
+
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-100 p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-xl transition-shadow duration-300">
+                <div class="flex items-center gap-6">
+                    <div class="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center text-primary shrink-0">
+                        <i data-feather="mail" class="w-8 h-8"></i>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h2 class="text-xl font-bold text-slate-900">General Inquiries</h2>
+                        <p class="text-slate-500 text-sm mt-1">For general questions regarding the project.</p>
+                    </div>
+                </div>
+                
+                <a href="mailto:mors3slu@gmail.com" class="group relative inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary text-white font-semibold rounded-xl hover:bg-secondary transition-all w-full md:w-auto overflow-hidden">
+                    <div class="absolute inset-0 w-full h-full bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+                    <span class="relative">mors3slu@gmail.com</span>
+                    <i data-feather="arrow-right" class="w-4 h-4 relative group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <div class="relative flex py-5 items-center">
+                <div class="flex-grow border-t border-slate-200"></div>
+                <span class="flex-shrink-0 mx-4 text-slate-400 text-xs font-semibold uppercase tracking-wider">Project Focal Person</span>
+                <div class="flex-grow border-t border-slate-200"></div>
+            </div>
+
+            <div class="flex justify-center">
+                <div class="bg-white rounded-2xl shadow-lg border border-slate-100 p-8 max-w-2xl w-full hover:-translate-y-1 transition-transform duration-300">
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+                        
+                        <div class="relative group">
+                            <div class="w-32 h-32 rounded-full p-1 bg-gradient-to-tr from-primary to-accent shrink-0">
+                                <img src="{{ url_for('static', filename='images/yuen-v.png') }}" alt="Christian Ka-Hang Yuen" class="w-full h-full rounded-full bg-white object-cover border-4 border-white">
+                            </div>
+                            <div class="absolute bottom-1 right-1 bg-green-500 w-5 h-5 rounded-full border-2 border-white" title="Available"></div>
+                        </div>
+
+                        <div class="flex-grow text-center md:text-left w-full">
+                            <h3 class="text-2xl font-bold text-slate-900">Christian Ka Hang Yuen</h3>
+                            <span class="inline-block bg-indigo-50 text-primary border border-indigo-100 text-xs font-bold px-3 py-1 rounded-full mt-2 mb-6">
+                                Project Focal Person
+                            </span>
+
+                            <div class="space-y-4">
+                                <div class="flex flex-col sm:flex-row items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 hover:border-primary/30 transition-colors">
+                                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-gmail shadow-sm">
+                                        <i data-feather="at-sign" class="w-4 h-4"></i>
+                                    </div>
+                                    <span class="font-medium text-slate-700 text-sm flex-grow">2214959@slu.edu.ph</span>
+                                    <a href="mailto:2214959@slu.edu.ph" class="text-xs font-bold text-primary hover:text-secondary px-3 py-1 bg-white rounded-md shadow-sm border border-slate-100">
+                                        Send Email
+                                    </a>
+                                </div>
+
+                                <div class="flex flex-col sm:flex-row items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 hover:border-primary/30 transition-colors">
+                                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-phone shadow-sm">
+                                        <i data-feather="phone" class="w-4 h-4"></i>
+                                    </div>
+                                    <span class="font-medium text-slate-700 text-sm flex-grow">+63 985 468 8092</span>
+                                    <a href="sms:+639854688092" class="text-xs font-bold text-primary hover:text-secondary px-3 py-1 bg-white rounded-md shadow-sm border border-slate-100">
+                                        Send SMS
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="text-center mt-12">
+            <p class="text-slate-500 text-sm">
+                Need technical documentation? Visit our <a href="/documentation" class="text-primary font-semibold hover:underline">Documentation Page</a>.
+            </p>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-300 py-12 mt-12" id="footer"></footer>
+    
+    <script>
+        // Initialize Icons
+        feather.replace();
+
+        // Navbar Scroll Effect (Copy from aboutus.html)
+        setTimeout(() => {
+            const nav = document.getElementById('navbar');
+            const navLogo = document.getElementById('nav-logo');
+            const navLinks = document.getElementById('nav-links')?.querySelectorAll('a:not(.bg-white)'); 
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    nav?.classList.add('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+                    nav?.classList.remove('bg-transparent');
+                    
+                    if(navLogo) {
+                        navLogo.classList.remove('text-white');
+                        navLogo.classList.add('text-primary');
+                    }
+                    
+                    navLinks?.forEach(link => {
+                        link.classList.remove('text-white');
+                        link.classList.add('text-slate-600');
+                    });
+                    
+                    if(mobileBtn) {
+                        mobileBtn.classList.remove('text-white');
+                        mobileBtn.classList.add('text-slate-800');
+                    }
+
+                } else {
+                    nav?.classList.remove('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+                    nav?.classList.add('bg-transparent');
+
+                    if(navLogo) {
+                        navLogo.classList.add('text-white');
+                        navLogo.classList.remove('text-primary');
+                    }
+
+                    navLinks?.forEach(link => {
+                        link.classList.add('text-white');
+                        link.classList.remove('text-slate-600');
+                    });
+
+                    if(mobileBtn) {
+                        mobileBtn.classList.add('text-white');
+                        mobileBtn.classList.remove('text-slate-800');
+                    }
+                }
+            });
+        }, 100); 
+    </script>
+</body>
+</html>
