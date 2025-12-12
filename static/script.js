@@ -18,9 +18,9 @@ fetch("/footer")
 
         //Different Copyright Content for LLM Translator
         if(window.location.pathname === "/rasa-translator") {
-            document.getElementById("copyright").innerHTML = "&copy; 2025 Saint Louis University NLP Team Mors3. Powered by Gemini LLM + Lexicon."
+            document.getElementById("copyright").innerHTML = "&copy; 2025 Saint Louis University Baguio City NLP Team Mors3. Powered by Gemini LLM + Lexicon."
         } else {
-            document.getElementById("copyright").innerHTML = "&copy; 2025 Saint Louis University NLP Team Mors3. All rights reserved."
+            document.getElementById("copyright").innerHTML = "&copy; 2025 Saint Louis University Baguio City NLP Team Mors3. All rights reserved."
         }
     });
 

@@ -1,4 +1,4 @@
-# ibaloiNLP : Preserving Ibaloi through Neural Processing
+# ibaloiNLP : Preserving Ibaloi through Natural Language Processing with Lexicon
 
 ---
 
