@@ -6,7 +6,7 @@
 
 | Member Email            | Member Name              | Role          | 
 | :---------------------- | :----------------------- | :-----------: | 
-| ddmiguel@slu.edu.ph     | Miguel Dalos             | Advisor       | 
+| ddmiguel@slu.edu.ph     | Dalos Miguel             | Advisor       | 
 | 2227226@slu.edu.ph      | Xymond Louisse Alcazar   | Researcher    |
 | 2195465@slu.edu.ph      | Rafael Lachica           | Researcher    |
 | 2212637@slu.edu.ph      | Cheni Lei Olanos         | Researcher    |
