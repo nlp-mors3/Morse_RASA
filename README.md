@@ -36,8 +36,8 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/PerhapsYou/Morse_RASA.git
-cd morse_rasa (https://github.com/PerhapsYou/Morse_RASA.git)
+git clone https://github.com/nlp-mors3/Morse_RASA.git
+cd morse_rasa (https://github.com/nlp-mors3/Morse_RASA.git)
 ```
 
 > You can also clone using the specific commit reference:
