@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ibaloi NLP | Lexicon Mode</title>
+    <title>Ibaloi NLP | Translation</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icons/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icons/favicon-16x16.png') }}">
@@ -84,7 +84,7 @@
     <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300 max" id="navbar"></nav>
     <main class="container mx-auto px-4 pt-18 max-w-5xl">
         
-        <div class="mt-20 mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3 shadow-sm animate-fade-in-up">
+        <div id="maintenanceBanner" class="hidden mt-20 mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3 shadow-sm animate-fade-in-up">
             <div class="text-amber-500 mt-0.5">
                 <i data-feather="alert-triangle" class="w-5 h-5"></i>
             </div>
@@ -97,37 +97,37 @@
             </div>
         </div>
 
-        <div class="text-center mb-10">
-            <div class="inline-flex items-center gap-2 bg-slate-100 px-3 py-1 rounded-full text-xs font-semibold text-slate-500 mb-4 border border-slate-200">
-                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                Lexicon Active · AI Offline
+        <div id="headerSection" class="text-center mb-10 transition-all duration-300">
+            <div id="statusBadge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-4 border transition-colors duration-300">
+                <span id="statusDot" class="w-2 h-2 rounded-full animate-pulse"></span>
+                <span id="statusText">Checking Status...</span>
             </div>
+            
             <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
                 Hybrid Translator
             </h1>
+            
             <p class="text-slate-500 max-w-2xl mx-auto text-lg">
-                <span class="font-semibold text-primary">Lexicon Lookup</span> + <span class="font-semibold text-slate-300 line-through decoration-slate-400 decoration-2">Generative AI</span>
+                <span class="font-semibold text-primary">Lexicon Lookup</span> + 
+                <span id="genAiLabel" class="font-semibold transition-all duration-300">Generative AI</span>
             </p>
         </div>
 
         <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-100 overflow-hidden relative min-h-[600px] flex flex-col md:flex-row">
             
             <div class="w-full md:w-5/12 border-r border-slate-100 flex flex-col bg-slate-50/30">
-                
                 <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-white">
                     <div class="flex items-center gap-2">
                         <img id="sourceFlag" src="https://flagcdn.com/w20/us.png" class="rounded-sm shadow-sm" alt="Flag">
                         <h3 id="sourceLangLabel" class="font-bold text-slate-700">English</h3>
                     </div>
-                    
                     <button id="swapBtn" class="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-primary transition-all transform hover:rotate-180 duration-300" title="Swap Languages">
                         <i data-feather="repeat" class="w-4 h-4"></i>
                     </button>
                 </div>
 
                 <div class="flex-grow relative group">
-                    <textarea id="inputText" class="w-full h-full p-6 bg-transparent border-none outline-none resize-none text-lg text-slate-700 placeholder-slate-400 font-medium" placeholder="Type here for rough translation..."></textarea>
-                    
+                    <textarea id="inputText" class="w-full h-full p-6 bg-transparent border-none outline-none resize-none text-lg text-slate-700 placeholder-slate-400 font-medium" placeholder="Type here..."></textarea>
                     <div class="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                          <button id="clearBtn" class="p-2 text-slate-400 hover:text-red-500 bg-white/80 backdrop-blur rounded-lg shadow-sm border border-slate-100 hover:border-red-100 transition-all">
                             <i data-feather="trash-2" class="w-4 h-4"></i>
@@ -145,7 +145,6 @@
             </div>
 
             <div class="w-full md:w-7/12 flex flex-col bg-slate-50 relative">
-                
                 <div class="loader-bar absolute top-0 left-0 z-10" id="loader">
                     <div class="bar"></div>
                 </div>
@@ -156,8 +155,8 @@
                         <h3 id="targetLangLabel" class="font-bold text-primary">Ibaloi</h3>
                     </div>
                     <div class="flex items-center gap-2 text-xs text-slate-400">
-                        <i data-feather="database" class="w-3 h-3 text-emerald-500"></i>
-                        <span id="lexiconStatus" class="font-medium text-slate-600">Lexicon Ready</span>
+                        <i id="statusIcon" data-feather="cpu" class="w-3 h-3 text-emerald-500"></i>
+                        <span id="lexiconStatus" class="font-medium text-slate-600">Ready</span>
                     </div>
                 </div>
 
@@ -167,23 +166,22 @@
                         <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center">
                             <i data-feather="book-open" class="w-8 h-8 opacity-50"></i>
                         </div>
-                        <p class="text-sm font-medium">Enter text for Lexicon lookup</p>
+                        <p class="text-sm font-medium">Enter text to translate</p>
                     </div>
 
                     <div id="lexiconSection" class="hidden animate-fade-in-up">
-                        <h4 class="text-xs font-bold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <i data-feather="check-circle" class="w-3 h-3"></i> Lexicon Matches (Active)
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <i data-feather="database" class="w-3 h-3"></i> Lexicon Context
                         </h4>
-                        <div id="lexiconChips" class="flex flex-wrap gap-2">
-                            </div>
+                        <div id="lexiconChips" class="flex flex-wrap gap-2"></div>
                     </div>
 
                     <div id="cardsSection" class="hidden animate-fade-in-up" style="animation-delay: 0.1s;">
-                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <i data-feather="cpu" class="w-3 h-3"></i> NLP-Driven Predictions
+                        <h4 class="text-xs font-bold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <i data-feather="zap" class="w-3 h-3"></i> AI Translation
                         </h4>
                         
-                        <div class="bg-slate-100 rounded-xl border border-slate-200 p-6 text-center maintenance-stripe relative overflow-hidden group">
+                        <div id="offlineCard" class="hidden bg-slate-100 rounded-xl border border-slate-200 p-6 text-center maintenance-stripe relative overflow-hidden group">
                             <div class="absolute inset-0 bg-white/60"></div>
                             <div class="relative z-10 flex flex-col items-center gap-3">
                                 <div class="w-12 h-12 bg-slate-200 rounded-full flex items-center justify-center text-slate-400">
@@ -191,13 +189,12 @@
                                 </div>
                                 <h5 class="font-bold text-slate-600">AI Service Unavailable</h5>
                                 <p class="text-sm text-slate-500 max-w-xs">
-                                    Full sentence construction is currently under maintenance. Please rely on the lexicon matches above.
+                                    Full sentence construction is currently offline. Please rely on the lexicon matches above.
                                 </p>
                             </div>
                         </div>
 
-                        <div id="predictionCards" class="hidden space-y-3 opacity-50 pointer-events-none grayscale">
-                            </div>
+                        <div id="predictionCards" class="hidden space-y-3"></div>
                     </div>
 
                 </div>
@@ -208,20 +205,31 @@
     <footer class="bg-slate-900 text-slate-300 py-12 mt-12" id="footer"></footer>
 
     <script>
-        // --- CONFIGURATION ---
-        // Toggle this to false when LLM is fixed
-        const MAINTENANCE_MODE = true; 
+        // ==========================================
+        //  CONFIGURATION SWITCH
+        // ==========================================
+        
+        // TOGGLE THIS: true = Maintenance Mode, false = Online Mode
+        const MAINTENANCE_MODE = false; 
+
+        // ==========================================
 
         const config = {
             en: { name: 'English', flag: 'https://flagcdn.com/w20/us.png', placeholder: "Type English here..." },
             ib: { name: 'Ibaloi', flag: 'https://flagcdn.com/w20/ph.png', placeholder: "Mansurat ka ni Ibaloi..." }
         };
 
-        // --- STATE ---
-        let currentDirection = 'en2ib'; // 'en2ib' or 'ib2en'
+        let currentDirection = 'en2ib';
         
-        // --- DOM ELEMENTS ---
         const els = {
+            banner: document.getElementById('maintenanceBanner'),
+            headerSection: document.getElementById('headerSection'),
+            statusBadge: document.getElementById('statusBadge'),
+            statusDot: document.getElementById('statusDot'),
+            statusText: document.getElementById('statusText'),
+            genAiLabel: document.getElementById('genAiLabel'),
+            offlineCard: document.getElementById('offlineCard'),
+            
             sourceFlag: document.getElementById('sourceFlag'),
             sourceLabel: document.getElementById('sourceLangLabel'),
             targetFlag: document.getElementById('targetFlag'),
@@ -240,17 +248,51 @@
             lexiconStatus: document.getElementById('lexiconStatus'),
         };
 
-        // --- INITIALIZATION ---
-        feather.replace();
+        // --- MAINTENANCE LOGIC ---
 
-        // --- API INTEGRATION ---
+        function initMaintenanceUI() {
+            if (MAINTENANCE_MODE) {
+                // 1. Show Banner
+                els.banner.classList.remove('hidden');
+                els.headerSection.classList.remove('pt-20'); // Remove padding if banner exists
+                
+                // 2. Update Badge to Amber (Offline)
+                els.statusBadge.className = "inline-flex items-center gap-2 bg-amber-50 px-3 py-1 rounded-full text-xs font-semibold text-amber-600 mb-4 border border-amber-200 transition-colors duration-300";
+                els.statusDot.className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
+                els.statusText.textContent = "Lexicon Active · AI Offline";
+
+                // 3. Update Description (Strikethrough)
+                els.genAiLabel.className = "font-semibold text-slate-300 line-through decoration-slate-400 decoration-2 transition-all duration-300";
+
+                // 4. Update Cards Visibility
+                els.offlineCard.classList.remove('hidden');
+                els.predictionCards.classList.add('hidden');
+
+            } else {
+                // 1. Hide Banner
+                els.banner.classList.add('hidden');
+                els.headerSection.classList.add('pt-20'); // Add padding for balance
+
+                // 2. Update Badge to Emerald (Online)
+                els.statusBadge.className = "inline-flex items-center gap-2 bg-emerald-50 px-3 py-1 rounded-full text-xs font-semibold text-emerald-600 mb-4 border border-emerald-100 transition-colors duration-300";
+                els.statusDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
+                els.statusText.textContent = "Lexicon Active · AI Online";
+
+                // 3. Update Description (Accent)
+                els.genAiLabel.className = "font-semibold text-accent transition-all duration-300";
+
+                // 4. Update Cards Visibility
+                els.offlineCard.classList.add('hidden');
+                // predictionCards remains hidden until search is done
+            }
+        }
+
+        // --- CORE FUNCTIONS ---
         
         const fetchTranslation = async (text) => {
             const response = await fetch('/api/translate', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text: text })
             });
 
@@ -261,8 +303,6 @@
             return await response.json();
         };
 
-        // --- FUNCTIONS ---
-        
         function updateUI() {
             const src = currentDirection === 'en2ib' ? config.en : config.ib;
             const tgt = currentDirection === 'en2ib' ? config.ib : config.en;
@@ -274,7 +314,6 @@
             els.targetLabel.textContent = tgt.name;
             els.targetFlag.src = tgt.flag;
 
-            // Clear results when swapping
             els.emptyState.classList.remove('hidden');
             els.lexiconSection.classList.add('hidden');
             els.cardsSection.classList.add('hidden');
@@ -282,7 +321,6 @@
 
         function renderLexicon(items) {
             els.lexiconChips.innerHTML = '';
-            
             if (!items || items.length === 0) {
                 els.lexiconChips.innerHTML = '<span class="text-xs text-slate-400 italic">No lexicon matches found.</span>';
                 return;
@@ -290,18 +328,17 @@
 
             items.forEach(item => {
                 const chip = document.createElement('div');
-                // Styling based on found/not found
                 const baseClass = "px-3 py-1.5 rounded-lg text-xs font-mono border flex items-center gap-2 transition-all cursor-default";
                 const colorClass = item.found 
-                    ? "bg-emerald-50 border-emerald-100 text-emerald-700 hover:bg-emerald-100" 
-                    : "bg-red-50 border-red-100 text-red-600 hover:bg-red-100";
+                    ? "bg-slate-50 border-slate-200 text-slate-600" 
+                    : "bg-red-50 border-red-100 text-red-400 opacity-75";
 
                 chip.className = `${baseClass} ${colorClass}`;
                 chip.innerHTML = `
                     <span class="opacity-75">${item.token}</span>
                     <i data-feather="arrow-right" class="w-3 h-3"></i>
                     <span class="font-bold">${item.map}</span>
-                    ${item.pos ? `<span class="ml-1 px-1 bg-white/50 rounded text-[9px] uppercase tracking-tighter border border-emerald-200/50">${item.pos}</span>` : ''}
+                    ${item.pos ? `<span class="ml-1 px-1 bg-white/50 rounded text-[9px] uppercase tracking-tighter border border-slate-200">${item.pos}</span>` : ''}
                 `;
                 els.lexiconChips.appendChild(chip);
             });
@@ -309,18 +346,15 @@
         }
 
         function renderCards(predictions) {
-            // IF MAINTENANCE MODE IS ON, DO NOT RENDER CARDS
+            // Check Maintenance Mode inside render
             if (MAINTENANCE_MODE) return;
 
             els.predictionCards.innerHTML = '';
-            
             if (!predictions || predictions.length === 0) return;
 
             predictions.forEach((text, index) => {
                 const isTop = index === 0;
                 const card = document.createElement('div');
-                
-                // Card Styling
                 card.className = `
                     group relative p-4 rounded-xl border transition-all duration-200 cursor-pointer card-hover
                     ${isTop ? 'bg-white border-accent/50 shadow-lg shadow-primary/5 ring-1 ring-accent/20' : 'bg-white/60 border-slate-200 hover:border-primary/30'}
@@ -349,11 +383,8 @@
 
         els.swapBtn.addEventListener('click', () => {
             currentDirection = currentDirection === 'en2ib' ? 'ib2en' : 'en2ib';
-            
-            // Animation for visual feedback
             els.swapBtn.style.transform = "rotate(180deg)";
             setTimeout(() => els.swapBtn.style.transform = "rotate(0deg)", 300);
-
             updateUI();
         });
 
@@ -371,20 +402,18 @@
             const text = els.input.value.trim();
             if (!text) return;
 
-            // Start Loading
             els.loader.classList.add('active');
             els.translateBtn.disabled = true;
             els.translateBtn.classList.add('opacity-75', 'cursor-not-allowed');
             els.emptyState.classList.add('hidden');
             els.lexiconSection.classList.add('hidden');
             els.cardsSection.classList.add('hidden');
-            els.lexiconStatus.textContent = "Searching DB..."; // Changed text to reflect DB only
+            els.lexiconStatus.textContent = "Processing..."; 
 
             try {
-                // Call Real API
                 const data = await fetchTranslation(text);
                 
-                // 1. Process Lexicon Data
+                // 1. Lexicon Data
                 const lexiconItems = data.breakdown.map(b => ({
                     token: b.word,
                     map: b.meaning,
@@ -392,51 +421,46 @@
                     pos: b.pos || null
                 }));
 
-                // 2. Process Predictions (Only if not in maintenance mode)
+                // 2. Predictions (Check Maintenance Mode)
                 if (!MAINTENANCE_MODE && data.translation) {
                     let predictions = [];
                     const rawLines = data.translation.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                    
                     const isNumberedList = rawLines.some(l => /^\d+\./.test(l));
                     if (isNumberedList) {
                         predictions = rawLines.map(l => l.replace(/^\d+\.\s*/, ''));
                     } else {
                         predictions = rawLines; 
                     }
-                    
                     els.predictionCards.classList.remove('hidden');
                     renderCards(predictions);
                 } else {
-                    // Maintenance mode active
                     els.predictionCards.classList.add('hidden');
                 }
 
-                // Render Results
                 renderLexicon(lexiconItems);
-                
                 els.lexiconSection.classList.remove('hidden');
-                els.cardsSection.classList.remove('hidden'); // This now shows the container with the "Offline" card
+                els.cardsSection.classList.remove('hidden'); 
                 
-                const foundCount = lexiconItems.filter(i => i.found).length;
-                els.lexiconStatus.textContent = `${foundCount} words found in Lexicon`;
+                els.lexiconStatus.textContent = (data.type === 'ai_refined' && !MAINTENANCE_MODE) 
+                    ? "AI Translated" 
+                    : "Lexicon Match";
 
             } catch (err) {
                 console.error(err);
                 alert(`Error: ${err.message}`);
                 els.emptyState.classList.remove('hidden');
             } finally {
-                // Stop Loading
                 els.loader.classList.remove('active');
                 els.translateBtn.disabled = false;
                 els.translateBtn.classList.remove('opacity-75', 'cursor-not-allowed');
             }
         });
 
-        // Initialize UI
+        // Initialize
+        feather.replace();
         updateUI();
+        initMaintenanceUI(); // Apply the toggle state
 
     </script>
-    
-
 </body>
 </html>

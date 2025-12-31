@@ -1,7 +1,8 @@
 import csv
 import re
 import os
-import google.generativeai as genai
+# REPLACE: Import Cerebras SDK instead of genai
+from cerebras.cloud.sdk import Cerebras
 
 class IbaloiTranslator:
     def __init__(self, csv_path='nlp_lib/FINAL-Ibaloi_LexiconWordCollection - Main Lexicon.csv', api_key=None):
@@ -15,13 +16,19 @@ class IbaloiTranslator:
         }
         self.IBALOI_STOPWORDS = set()
 
-        self.api_key = api_key or os.environ.get("GEMINI_API_KEY")
+        # REPLACE: Initialize Cerebras Client
+        self.api_key = api_key or os.environ.get("CEREBRAS_API_KEY")
+        self.client = None
+        
         if self.api_key:
-            genai.configure(api_key=self.api_key)
-            self.model = genai.GenerativeModel('gemini-2.0-flash-lite')
+            try:
+                self.client = Cerebras(api_key=self.api_key)
+                self.model_name = "llama-3.3-70b" 
+                print(f"Cerebras AI initialized with model: {self.model_name}")
+            except Exception as e:
+                print(f"Error initializing Cerebras AI: {e}")
         else:
-            print("Warning: No GEMINI_API_KEY provided. AI refinement will be disabled.")
-            self.model = None
+            print("Warning: No CEREBRAS_API_KEY provided. AI refinement will be disabled.")
 
         # Load Data
         self.load_lexicon(csv_path)
@@ -66,11 +73,6 @@ class IbaloiTranslator:
         return re.sub(r'[^\w\s-]', '', token).lower()
 
     def detect_direction(self, text):
-        """
-        Simple heuristic to detect direction. 
-        Checks which lexicon has more hits for the input words.
-        Defaults to 'ib2en' (Ibaloi -> English).
-        """
         tokens = [self.clean_token(t) for t in text.split()]
         ib_hits = sum(1 for t in tokens if t in self.ib_to_en)
         en_hits = sum(1 for t in tokens if t in self.en_to_ib)
@@ -81,8 +83,7 @@ class IbaloiTranslator:
 
     def translate(self, text):
         """
-        Translates text using Lexicon lookup + Gemini refinement.
-        Returns a dictionary compatible with the Flask app.
+        Translates text using Lexicon lookup + Cerebras refinement.
         """
         if not text:
             return {"error": "No text provided", "success": False}
@@ -109,9 +110,7 @@ class IbaloiTranslator:
         for token in raw_tokens:
             clean = self.clean_token(token)
             
-            # Skip empty or stopwords for lookup, but keep in structure if needed
             if not clean or clean in stopwords:
-                # Just append original for flow, but mark as skipped in breakdown if desired
                 translated_tokens.append(token) 
                 continue
 
@@ -120,7 +119,6 @@ class IbaloiTranslator:
                 target_word = entry['target']
                 translated_tokens.append(target_word)
                 
-                # Add to breakdown list for frontend
                 breakdown_item = {
                     "word": token,
                     "meaning": target_word,
@@ -129,13 +127,11 @@ class IbaloiTranslator:
                 }
                 breakdown_data.append(breakdown_item)
 
-                # Prepare context for LLM
                 details = [f"Mapped to: '{target_word}'"]
                 if 'POS' in entry: details.append(f"POS: {entry['POS']}")
                 if 'Ibaloi_Example' in entry: details.append(f"Ex(IB): {entry['Ibaloi_Example']}")
                 if 'English_Example' in entry: details.append(f"Ex(EN): {entry['English_Example']}")
                 if 'Notes' in entry: details.append(f"Notes: {entry['Notes']}")
-
                 
                 found_context_strings.append(f"- Input '{clean}': {'; '.join(details)}")
             else:
@@ -146,11 +142,11 @@ class IbaloiTranslator:
         rough_translation = " ".join(translated_tokens)
         context_block = "\n".join(found_context_strings)
 
-        # Step 2: Refine with Gemini
-        final_translation = rough_translation # Default to rough if LLM fails/missing
+        # Step 2: Refine with Cerebras AI
+        final_translation = rough_translation 
         
-        if self.model:
-            final_translation = self.refine_with_gemini(
+        if self.client:
+            final_translation = self.refine_with_cerebras(
                 rough_translation, text, source_lang, target_lang, has_missing_words, context_block
             )
 
@@ -161,74 +157,77 @@ class IbaloiTranslator:
             "breakdown": breakdown_data,
             "rough_translation": rough_translation,
             "direction": direction,
-            "type": "ai_refined" if self.model else "lexicon_only"
+            "type": "ai_refined" if self.client else "lexicon_only"
         }
 
-    def refine_with_gemini(self, rough_text, original_input, source_lang, target_lang, has_missing_words, context_block):
+    def refine_with_cerebras(self, rough_text, original_input, source_lang, target_lang, has_missing_words, context_block):
         try:
-            
-            base_prompt = f"""
-                You are an expert linguist and translator specializing in the Ibaloi language (Northern Philippines) and English. 
-                Your task is to translate the user's input from {source_lang} to {target_lang}.
+            # Construct System Prompt (Stricter JSON/Format instructions)
+            system_prompt = f"""
+            You are an expert linguist specializing in the Ibaloi language (Northern Philippines) and English. 
+            Your task is to translate the user's input from {source_lang} to {target_lang}.
 
-                ### INPUT DATA
-                1.  Original Input ({source_lang}): {original_input}
-
-                2.  Lexicon Lookup (Rough Draft): {rough_text}
-
-                3.  Lexicon Context & Metadata:
-                {context_block}
-
-                ### LINGUISTIC GUIDELINES (Strict Adherence)
-                
-                1.  SYNTAX & GRAMMAR:
-                Structure: English follows SVO (Subject-Verb-Object). Ibaloi typically follows VSO (Verb-Subject-Object) or VOS. Adjust the sentence structure accordingly.
-                Focus System: Pay attention to Ibaloi verbal affixes. 
-                    *Actor Focus: man-, um-, maka-
-                    *Object Focus: -en, i-, -an
-                    *Past Tense: usually involves an infix like '-in-' (e.g., 'kinan' from 'kan') or prefix 'nan-'.
-                Pronouns: Use correct case (e.g., 'sih'kak' for I, 'mo' for you [genitive], 'ka' for you [nominative]).
-
-                2.  ORTHOGRAPHY & SPELLING:
-                *'SH' Sound:** Use 'sh' for the soft palatal sound common in Ibaloi (e.g., shiman (there), shiyay (here), shobda (smoke)). Do not anglicize this to 'ch' or 's'.
-                *'J' Sound:** Use 'j' for the affricate sound (e.g., jagjag, jet).
-                Glottal Stops: Preserve glottal stops if implied (e.g., ngah'ngah).
-                
-                3.  TONE & STYLE:
-                •  Maintain the paragraph structure (newlines) of the original input.
-                •  The translation should be natural and conversational, not a robotic word-for-word translation.
-                If specific cultural terms (like *Cañao/Kanyaw or specific rituals) appear, preserve the Ibaloi term if there is no direct English equivalent.
-
-                ### INSTRUCTIONS
+            ### IMPORTANT OUTPUT RULES
+            - Do NOT explain your reasoning.
+            - Do NOT provide linguistic analysis.
+            - Do NOT output "Okay, let's tackle this translation".
+            - Output ONLY the final result as requested below.
             """
-            
+
+            # Construct User Prompt
+            user_content = f"""
+            ### CONTEXT
+            1. Input: "{original_input}"
+            2. Lexicon Hints: {rough_text}
+            3. Metadata:
+            {context_block}
+
+            ### TASK
+            """
+
             if has_missing_words:
-                prompt = base_prompt + f"""
-
-                NOTE: Some words were missing from the lexicon (indicated by brackets []).
-
-                Task:
-                1. Analyze the context of the Original Input to infer the missing words.
-                2. Using the "Detailed Context" provided above, ensure the known words are used correctly (e.g. check Example sentences for usage patterns).
-                3. Provide the **TOP 5 most likely translations** for the entire sentence in {target_lang}.
-
-                Output strictly a numbered list (1 to 5) of the translated sentences. Do not add introductory text.
+                user_content += f"""
+                Some words are missing. Based on context, provide the **TOP 5 most likely translations** in {target_lang}.
+                
+                Format your response strictly as a numbered list:
+                1. [First translation]
+                2. [Second translation]
+                3. [Third translation]
+                4. [Fourth translation]
+                5. [Fifth translation]
                 """
             else:
-                prompt = base_prompt + f"""
-
-                Task:
-                1. Create a single natural, grammatically correct sentence in {target_lang}.
-                2. Use the "Detailed Context" provided above to ensure accurate usage (pay attention to POS and Examples).
-
-                Output only the final corrected {target_lang} sentence.
+                user_content += f"""
+                Create a single natural, grammatically correct sentence in {target_lang}.
+                
+                Format your response strictly as just the sentence string. No numbers, no quotes, no labels.
                 """
 
-            response = self.model.generate_content(prompt)
-            return response.text.strip()
+            # Call Cerebras API
+            response = self.client.chat.completions.create(
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_content}
+                ],
+                model=self.model_name,
+                temperature=0.3, # Lower temperature to reduce "chatty" behavior
+                max_completion_tokens=300
+            )
+
+            # Post-processing: If the model still outputs thoughts (lines starting with numbers often indicate thoughts in some models), try to clean it
+            content = response.choices[0].message.content.strip()
+            
+            # Simple heuristic cleaning if it still chats: get the last non-empty line
+            if "\n" in content and not has_missing_words:
+                lines = [line for line in content.split('\n') if line.strip()]
+                # If the last line looks like a sentence, take it.
+                return lines[-1]
+            
+            return content
+
         except Exception as e:
-            return f"{rough_text} (AI Error: {str(e)})"
+            print(f"Cerebras API Error: {e}")
+            return f"{rough_text} (AI Error: Check console)"
 
 if __name__ == "__main__":
-
     translator = IbaloiTranslator()
